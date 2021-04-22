@@ -71,7 +71,7 @@ class Lexer:
         return self.__source.move_and_get_char()
 
     def __get_char(self):
-        return self.__source.get_char
+        return self.__source.get_char()
 
     def __get_position(self):
         return self.__source.get_position()
