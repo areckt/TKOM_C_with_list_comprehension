@@ -69,7 +69,7 @@ class Token:
         self.value = value
 
     def get_position(self):
-        # returns [line, column]
+        # returns (line, column)
         return self.line, self.column
 
     def get_type(self):

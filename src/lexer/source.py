@@ -23,5 +23,5 @@ class Source:
         return self.get_char()
 
     def get_position(self):
-        # returns [line, column]
+        # returns (line, column)
         return self.line, self.column
