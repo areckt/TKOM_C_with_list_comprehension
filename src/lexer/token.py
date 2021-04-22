@@ -78,7 +78,7 @@ class Token:
     # string representation of an object
     # used for debugging
     def __repr__(self):
-        rep = '{self.type.name} \t {self.value} \t pos({self.line}, {self.column})'
+        rep = f'{self.type.name} \t {self.value} \t pos({self.line}, {self.column})'
         return rep
 
 class TokenDicts:
