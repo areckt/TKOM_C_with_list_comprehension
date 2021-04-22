@@ -37,10 +37,10 @@ class TokenType(Enum):
     # assign operator
     ASSIGN = auto()                 # "="
 
-    # literals ?
-    # INT_LITERAL = auto()
-    # FLOAT_LITERAL = auto()
-    # STRING_LITERAL = auto()
+    # literals (?)
+    INT_LITERAL = auto()
+    FLOAT_LITERAL = auto()
+    STRING_LITERAL = auto()
 
     # keywords
     RETURN_KEYWORD = auto()
@@ -82,39 +82,45 @@ class Token:
         return rep
 
 class TokenDicts:
-    tokens = {
-        ';':        TokenType.SEMICOLON,
-        '(':        TokenType.OPEN_BRACKET,
-        ')':        TokenType.CLOSE_BRACKET,
-        '{':        TokenType.OPEN_BLOCK,
-        '}':        TokenType.CLOSE_BLOCK,
-        '[':        TokenType.OPEN_LIST,
-        ']':        TokenType.CLOSE_LIST,
-        '+':        TokenType.PLUS,
-        '-':        TokenType.MINUS,
-        '*':        TokenType.MULTIPLY,
-        '/':        TokenType.DIVIDE,
-        '%':        TokenType.MODULO,
+    keywords = {
+        'return': TokenType.RETURN_KEYWORD,
+        'while': TokenType.WHILE_KEYWORD,
+        'if': TokenType.IF_KEYWORD,
+        'else': TokenType.ELSE_KEYWORD,
+        'for': TokenType.FOR_KEYWORD,
+        'in': TokenType.IN_KEYWORD,
+        'int': TokenType.INT_KEYWORD,
+        'int[]': TokenType.INT_LIST_KEYWORD,
+        'float': TokenType.FLOAT_KEYWORD,
+        'float[]': TokenType.FLOAT_LIST_KEYWORD,
+        'string': TokenType.STRING_KEYWORD,
+        'string[]': TokenType.STRING_LIST_KEYWORD
+    }
+
+    one_char_tokens = {
+        ';': TokenType.SEMICOLON,
+        '(': TokenType.OPEN_BRACKET,
+        ')': TokenType.CLOSE_BRACKET,
+        '{': TokenType.OPEN_BLOCK,
+        '}': TokenType.CLOSE_BLOCK,
+        '[': TokenType.OPEN_LIST,
+        ']': TokenType.CLOSE_LIST,
+        '+': TokenType.PLUS,
+        '-': TokenType.MINUS,
+        '*': TokenType.MULTIPLY,
+        '/': TokenType.DIVIDE,
+        '%': TokenType.MODULO,
+        '!': TokenType.NOT,
+        '<': TokenType.LESS,
+        '=': TokenType.ASSIGN
+    }
+
+    two_char_tokens = {
         '&&':       TokenType.AND,
         '||':       TokenType.OR,
-        '!':        TokenType.NOT,
-        '<':        TokenType.LESS,
         '<=':       TokenType.LESS_OR_EQUAL,
         '==':       TokenType.EQUAL,
         '!=':       TokenType.NOT_EQUAL,
         '>':        TokenType.GREATER,
-        '>=':       TokenType.GREATER_OR_EQUAL,
-        '=':        TokenType.ASSIGN,
-        'return':   TokenType.RETURN_KEYWORD,
-        'while':    TokenType.WHILE_KEYWORD,
-        'if':       TokenType.IF_KEYWORD,
-        'else':     TokenType.ELSE_KEYWORD,
-        'for':      TokenType.FOR_KEYWORD,
-        'in':       TokenType.IN_KEYWORD,
-        'int':      TokenType.INT_KEYWORD,
-        'int[]':    TokenType.INT_LIST_KEYWORD,
-        'float':    TokenType.FLOAT_KEYWORD,
-        'float[]':  TokenType.FLOAT_LIST_KEYWORD,
-        'string':   TokenType.STRING_KEYWORD,
-        'string[]': TokenType.STRING_LIST_KEYWORD
+        '>=':       TokenType.GREATER_OR_EQUAL
     }
