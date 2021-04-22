@@ -12,6 +12,7 @@ def init_all(input_file):
     # print("init_all here!")
     token = lexer.build_and_get_token()
     while token.get_type() != TokenType.EOF_SYMBOL:
+        # for now I just print found tokens on screen
         print(token)
         token = lexer.build_and_get_token()
 
@@ -21,7 +22,7 @@ def main():
         print("You have to specify input file name")
         return
 
-    program = init_all(sys.argv[1])
+    init_all(sys.argv[1])
 
 
 if __name__ == "__main__":
