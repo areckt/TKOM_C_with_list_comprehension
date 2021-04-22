@@ -38,8 +38,9 @@ class LexerTest(unittest.TestCase):
 
     def test_one_identifier(self):
         input_str = """foo"""
-        expected_tokens = [TokenType.IDENTIFIER, "foo"]
+        expected_tokens = [Token(TokenType.IDENTIFIER, "foo")]
         self.assert_expected_tokens(input_str, expected_tokens)
+
 
 if __name__ == '__main__':
     unittest.main()
