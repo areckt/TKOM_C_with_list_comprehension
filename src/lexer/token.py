@@ -1,5 +1,6 @@
 from enum import Enum, auto, unique
 
+
 @unique
 class TokenType(Enum):
 
@@ -22,6 +23,7 @@ class TokenType(Enum):
     MULTIPLY = auto()               # "*"
     DIVIDE = auto()                 # "/"
     MODULO = auto()                 # "%"
+    LENGTH_OP = auto()              # "_"
 
     # logical and bool operators
     AND = auto()                    # "&&"
@@ -37,7 +39,7 @@ class TokenType(Enum):
     # assign operator
     ASSIGN = auto()                 # "="
 
-    # literals (?)
+    # literals
     INT_LITERAL = auto()
     FLOAT_LITERAL = auto()
     STRING_LITERAL = auto()
@@ -57,6 +59,7 @@ class TokenType(Enum):
     STRING_LIST_KEYWORD = auto()
 
     UNKNOWN = auto()
+
 
 class Token:
     def __init__(self, token_type: TokenType, value="", line: int = 0, column: int = 0):
@@ -80,6 +83,7 @@ class Token:
     def __repr__(self):
         rep = f'{self.type.name} \t {self.value} \t pos({self.line}, {self.column})'
         return rep
+
 
 class TokenDicts:
     keywords = {
@@ -112,7 +116,8 @@ class TokenDicts:
         '%': TokenType.MODULO,
         '!': TokenType.NOT,
         '<': TokenType.LESS,
-        '=': TokenType.ASSIGN
+        '=': TokenType.ASSIGN,
+        '_': TokenType.LENGTH_OP
     }
 
     two_char_tokens = {
