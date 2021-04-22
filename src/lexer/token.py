@@ -40,23 +40,23 @@ class TokenType(Enum):
     ASSIGN = auto()                 # "="
 
     # literals
-    INT_LITERAL = auto()
-    FLOAT_LITERAL = auto()
-    STRING_LITERAL = auto()
+    INT_LITERAL = auto()            # e.g. 5
+    FLOAT_LITERAL = auto()          # e.g. 4.5
+    STRING_LITERAL = auto()         # e.g. 'great'
 
     # keywords
-    RETURN_KEYWORD = auto()
-    WHILE_KEYWORD = auto()
-    IF_KEYWORD = auto()
-    ELSE_KEYWORD = auto()
-    FOR_KEYWORD = auto()
-    IN_KEYWORD = auto()
-    INT_KEYWORD = auto()
-    INT_LIST_KEYWORD = auto()
-    FLOAT_KEYWORD = auto()
-    FLOAT_LIST_KEYWORD = auto()
-    STRING_KEYWORD = auto()
-    STRING_LIST_KEYWORD = auto()
+    RETURN_KEYWORD = auto()         # 'return'
+    WHILE_KEYWORD = auto()          # 'while'
+    IF_KEYWORD = auto()             # 'for'
+    ELSE_KEYWORD = auto()           # 'else'
+    FOR_KEYWORD = auto()            # 'for'
+    IN_KEYWORD = auto()             # 'in'
+    INT_KEYWORD = auto()            # 'int'
+    INT_LIST_KEYWORD = auto()       # 'int[]'
+    FLOAT_KEYWORD = auto()          # 'float'
+    FLOAT_LIST_KEYWORD = auto()     # 'float[]'
+    STRING_KEYWORD = auto()         # 'string'
+    STRING_LIST_KEYWORD = auto()    # 'string[]'
 
     UNKNOWN = auto()
 
