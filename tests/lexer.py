@@ -123,6 +123,11 @@ class LexerTest(unittest.TestCase):
         expected_tokens = [Token(TokenType.SEMICOLON)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
+    def test_comma(self):
+        input_str = ","
+        expected_tokens = [Token(TokenType.COMMA)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
     def test_open_bracket(self):
         input_str = "("
         expected_tokens = [Token(TokenType.OPEN_BRACKET)]
@@ -238,6 +243,11 @@ class LexerTest(unittest.TestCase):
         expected_tokens = [Token(TokenType.INT_LITERAL, 546)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
+    def test_int_literal_zero(self):
+        input_str = "0"
+        expected_tokens = [Token(TokenType.INT_LITERAL, 0)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
     def test_float_literal(self):
         input_str = "36.7"
         expected_tokens = [Token(TokenType.FLOAT_LITERAL, 36.7)]
@@ -251,6 +261,11 @@ class LexerTest(unittest.TestCase):
     def test_string_literal(self):
         input_str = '"example string 123 !@#"'
         expected_tokens = [Token(TokenType.STRING_LITERAL, "example string 123 !@#")]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_string_literal_with_no_closing_quotation_mark(self):
+        input_str = '"Oh no, I forgot about closing quotation mark!'
+        expected_tokens = [Token(TokenType.UNKNOWN)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_unknown(self):
