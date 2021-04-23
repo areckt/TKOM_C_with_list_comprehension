@@ -24,8 +24,12 @@ class LexerTest(unittest.TestCase):
             token = lexer.build_and_get_token()
 
         for i in range(len(expected_sequence_of_tokens)):
-            self.assertEqual(tokens[i].get_type(), expected_sequence_of_tokens[i].get_type())
-            self.assertEqual(tokens[i].get_value(), expected_sequence_of_tokens[i].get_value())
+            a, b = tokens[i].get_type(), expected_sequence_of_tokens[i].get_type()
+            c, d = tokens[i].get_value(), expected_sequence_of_tokens[i].get_value()
+            # self.assertEqual(tokens[i].get_type(), expected_sequence_of_tokens[i].get_type())
+            # self.assertEqual(tokens[i].get_value(), expected_sequence_of_tokens[i].get_value())
+            self.assertEqual(b, a)
+            self.assertEqual(d, c)
 
     # #################
     # vvv T E S T S vvv
@@ -42,6 +46,15 @@ class LexerTest(unittest.TestCase):
             Token(TokenType.IDENTIFIER, "foo"),
             Token(TokenType.IDENTIFIER, "bar"),
             Token(TokenType.IDENTIFIER, "baz")
+        ]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_identifiers_similar_to_keywords(self):
+        input_str = "ford wwhile if2"
+        expected_tokens = [
+            Token(TokenType.IDENTIFIER, "ford"),
+            Token(TokenType.IDENTIFIER, "wwhile"),
+            Token(TokenType.IDENTIFIER, "if2")
         ]
         self.assert_expected_tokens(input_str, expected_tokens)
 
@@ -103,6 +116,146 @@ class LexerTest(unittest.TestCase):
     def test_string_list_keyword(self):
         input_str = "string[]"
         expected_tokens = [Token(TokenType.STRING_LIST_KEYWORD)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_semicolon(self):
+        input_str = ";"
+        expected_tokens = [Token(TokenType.SEMICOLON)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_open_bracket(self):
+        input_str = "("
+        expected_tokens = [Token(TokenType.OPEN_BRACKET)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_close_bracket(self):
+        input_str = ")"
+        expected_tokens = [Token(TokenType.CLOSE_BRACKET)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_open_block(self):
+        input_str = "{"
+        expected_tokens = [Token(TokenType.OPEN_BLOCK)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_close_block(self):
+        input_str = "}"
+        expected_tokens = [Token(TokenType.CLOSE_BLOCK)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_open_list(self):
+        input_str = "["
+        expected_tokens = [Token(TokenType.OPEN_LIST)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_close_list(self):
+        input_str = "]"
+        expected_tokens = [Token(TokenType.CLOSE_LIST)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_plus(self):
+        input_str = "+"
+        expected_tokens = [Token(TokenType.PLUS)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_minus(self):
+        input_str = "-"
+        expected_tokens = [Token(TokenType.MINUS)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_multiply(self):
+        input_str = "*"
+        expected_tokens = [Token(TokenType.MULTIPLY)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_divide(self):
+        input_str = "/"
+        expected_tokens = [Token(TokenType.DIVIDE)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_modulo(self):
+        input_str = "%"
+        expected_tokens = [Token(TokenType.MODULO)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_length_op(self):
+        input_str = "_"
+        expected_tokens = [Token(TokenType.LENGTH_OP)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_and(self):
+        input_str = "&&"
+        expected_tokens = [Token(TokenType.AND)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_or(self):
+        input_str = "||"
+        expected_tokens = [Token(TokenType.OR)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_not(self):
+        input_str = "!"
+        expected_tokens = [Token(TokenType.NOT)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_less(self):
+        input_str = "<"
+        expected_tokens = [Token(TokenType.LESS)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_less_or_equal(self):
+        input_str = "<="
+        expected_tokens = [Token(TokenType.LESS_OR_EQUAL)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_equal(self):
+        input_str = "=="
+        expected_tokens = [Token(TokenType.EQUAL)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_not_equal(self):
+        input_str = "!="
+        expected_tokens = [Token(TokenType.NOT_EQUAL)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_greater(self):
+        input_str = ">"
+        expected_tokens = [Token(TokenType.GREATER)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_greater_or_equal(self):
+        input_str = ">="
+        expected_tokens = [Token(TokenType.GREATER_OR_EQUAL)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_assign(self):
+        input_str = "="
+        expected_tokens = [Token(TokenType.ASSIGN)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_int_literal(self):
+        input_str = "546"
+        expected_tokens = [Token(TokenType.INT_LITERAL, 546)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_float_literal(self):
+        input_str = "36.7"
+        expected_tokens = [Token(TokenType.FLOAT_LITERAL, 36.7)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_float_literal_smaller_than_one(self):
+        input_str = "0.12345"
+        expected_tokens = [Token(TokenType.FLOAT_LITERAL, 0.12345)]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_string_literal(self):
+        input_str = '"example string 123 !@#"'
+        expected_tokens = [Token(TokenType.STRING_LITERAL, "example string 123 !@#")]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_unknown(self):
+        input_str = "list["
+        expected_tokens = [Token(TokenType.UNKNOWN, "list[")]
         self.assert_expected_tokens(input_str, expected_tokens)
 
 
