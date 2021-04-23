@@ -8,6 +8,7 @@ class TokenType(Enum):
     EOF_SYMBOL = auto()             # EOF
     IDENTIFIER = auto()             # identifier
     SEMICOLON = auto()              # ";"
+    COMMA = auto()                  # ","
 
     # brackets
     OPEN_BRACKET = auto()           # "("
@@ -103,6 +104,7 @@ class TokenDicts:
 
     one_char_tokens = {
         ';': TokenType.SEMICOLON,
+        ',': TokenType.COMMA,
         '(': TokenType.OPEN_BRACKET,
         ')': TokenType.CLOSE_BRACKET,
         '{': TokenType.OPEN_BLOCK,
@@ -116,6 +118,7 @@ class TokenDicts:
         '%': TokenType.MODULO,
         '!': TokenType.NOT,
         '<': TokenType.LESS,
+        '>': TokenType.GREATER,
         '=': TokenType.ASSIGN,
         '_': TokenType.LENGTH_OP
     }
@@ -126,6 +129,5 @@ class TokenDicts:
         '<=':       TokenType.LESS_OR_EQUAL,
         '==':       TokenType.EQUAL,
         '!=':       TokenType.NOT_EQUAL,
-        '>':        TokenType.GREATER,
         '>=':       TokenType.GREATER_OR_EQUAL
     }
