@@ -6,6 +6,7 @@ class Lexer:
     def __init__(self, source):
         self.__source = source
         self.token = None
+        # juz tu zawolac build_and_get_token (?)
 
     def get_token(self):
         return self.token
@@ -118,21 +119,44 @@ class Lexer:
         value = 0
         digit_candidate = self.__get_char()
         if digit_candidate.isdigit():
-            if digit_candidate == '0':
-                # TUTAJ TO POPRAWIC, BO NA RAZIE TYLKO DLA INTOW!!!
-                self.__move_pointer()
-                return Token(TokenType.INT_LITERAL, value)
 
+            # if we have number in range [0, 1)
+            if digit_candidate == '0':
+                digit_candidate = self.__move_and_get_char()
+                if digit_candidate != '.':
+                    return Token(TokenType.INT_LITERAL, 0)
+                else:
+                    _, dot_position = self.__get_position()
+                    digit_candidate = self.__move_and_get_char()
+                    while digit_candidate.isdigit():
+                        value = value * 10 + int(digit_candidate)
+                        digit_candidate = self.__move_and_get_char()
+                    _, current_column = self.__get_position()
+                    return Token(TokenType.FLOAT_LITERAL, value * 10**(dot_position - current_column + 1))
+
+            # if we have number >= 1
             value = int(digit_candidate)
             digit_candidate = self.__move_and_get_char()
             while digit_candidate.isdigit():
                 value = value * 10 + int(digit_candidate)
                 digit_candidate = self.__move_and_get_char()
-            # if digit_candidate == '.' .....
-            return Token(TokenType.INT_LITERAL, value)
+            # if there's a dot we have float
+            if digit_candidate == '.':
+                _, dot_position = self.__get_position()
+                digit_candidate = self.__move_and_get_char()
+                while digit_candidate.isdigit():
+                    value = value * 10 + int(digit_candidate)
+                    digit_candidate = self.__move_and_get_char()
+                _, current_column = self.__get_position()
+                return Token(TokenType.FLOAT_LITERAL, value * 10**(dot_position - current_column + 1))
+
+            # if there isn't a dot we have int
+            else:
+                return Token(TokenType.INT_LITERAL, value)
         return None
 
     def __try_string(self):
+        # znaki ucieczki!
         char = self.__get_char()
         if char == '"':
             string = ''
@@ -161,6 +185,6 @@ class Lexer:
 
     def __get_unknown_and_move(self):
         char = self.__get_char()
-        self.__move_pointer()  # move so it's possible to continue after unknown
         LexerError(self.__get_position(), "UNKNOWN TOKEN").warning()
+        self.__move_pointer()  # move so it's possible to continue after unknown
         return Token(TokenType.UNKNOWN, char)
