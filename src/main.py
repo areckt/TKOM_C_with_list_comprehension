@@ -11,6 +11,9 @@ def init_all(input_file):
     lexer = Lexer(source)
     # print("init_all here!")
     token = lexer.build_and_get_token()
+    print("TOKEN TYPE".ljust(26) + "VALUE".ljust(26) + "POSITION")
+    print("\u203E\u203E\u203E\u203E\u203E\u203E\u203E\u203E\u203E\u203E".ljust(26) +\
+          "\u203E\u203E\u203E\u203E\u203E".ljust(26) + "\u203E\u203E\u203E\u203E\u203E\u203E\u203E\u203E")
     while token.get_type() != TokenType.EOF_SYMBOL:
         # for now I just print found tokens on screen
         print(token)
