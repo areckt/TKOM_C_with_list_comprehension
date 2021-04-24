@@ -263,6 +263,11 @@ class LexerTest(unittest.TestCase):
         expected_tokens = [Token(TokenType.STRING_LITERAL, "example string 123 !@#")]
         self.assert_expected_tokens(input_str, expected_tokens)
 
+    def test_string_literal_with_escape_characters(self):
+        input_str = '''"example\\n \\\"string\\t123 !@#"'''
+        expected_tokens = [Token(TokenType.STRING_LITERAL, '''example\\n \\\"string\\t123 !@#''')]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
     def test_string_literal_with_no_closing_quotation_mark(self):
         input_str = '"Oh no, I forgot about closing quotation mark!'
         expected_tokens = [Token(TokenType.UNKNOWN)]
