@@ -157,19 +157,20 @@ class Lexer:
 
     def __try_string(self):
         # znaki ucieczki!
-        char = self.__get_char()
+        curr_char = self.__get_char()
         position = self.__get_position()
-        if char == '"':
+        if curr_char == '"':
             string = ''
-            char = self.__move_and_get_char()
-            while char != '"' and char:
-                string += char
-                char = self.__move_and_get_char()
-
-            # if there's no closing quotation mark
-            if not char:
-                LexerError(position, "You forgot about closing quotation mark!").warning()
-                return Token(TokenType.UNKNOWN)
+            prev_char = curr_char
+            curr_char = self.__move_and_get_char()
+            while not(curr_char == '"' and prev_char != "\\"):
+                string += curr_char
+                prev_char = curr_char
+                curr_char = self.__move_and_get_char()
+                if curr_char == "":
+                    # if there's no closing quotation mark
+                    LexerError(position, "You forgot about closing quotation mark!")
+                    return Token(TokenType.UNKNOWN)
 
             self.__move_pointer()  # move to skip '"' quote
             return Token(TokenType.STRING_LITERAL, string)
