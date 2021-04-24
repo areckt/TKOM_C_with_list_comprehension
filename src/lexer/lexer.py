@@ -126,13 +126,13 @@ class Lexer:
                 if digit_candidate != '.':
                     return Token(TokenType.INT_LITERAL, 0)
                 else:
-                    _, dot_position = self.__get_position()
+                    _, point_position = self.__get_position()
                     digit_candidate = self.__move_and_get_char()
                     while digit_candidate.isdigit():
                         value = value * 10 + int(digit_candidate)
                         digit_candidate = self.__move_and_get_char()
                     _, current_column = self.__get_position()
-                    return Token(TokenType.FLOAT_LITERAL, value * 10**(dot_position - current_column + 1))
+                    return Token(TokenType.FLOAT_LITERAL, value * 10**(point_position - current_column + 1))
 
             # if we have number >= 1
             value = int(digit_candidate)
@@ -140,23 +140,22 @@ class Lexer:
             while digit_candidate.isdigit():
                 value = value * 10 + int(digit_candidate)
                 digit_candidate = self.__move_and_get_char()
-            # if there's a dot we have float
+            # if there's a point we have float
             if digit_candidate == '.':
-                _, dot_position = self.__get_position()
+                _, point_position = self.__get_position()
                 digit_candidate = self.__move_and_get_char()
                 while digit_candidate.isdigit():
                     value = value * 10 + int(digit_candidate)
                     digit_candidate = self.__move_and_get_char()
                 _, current_column = self.__get_position()
-                return Token(TokenType.FLOAT_LITERAL, value * 10**(dot_position - current_column + 1))
+                return Token(TokenType.FLOAT_LITERAL, value * 10**(point_position - current_column + 1))
 
-            # if there isn't a dot we have int
+            # if there isn't a point we have int
             else:
                 return Token(TokenType.INT_LITERAL, value)
         return None
 
     def __try_string(self):
-        # znaki ucieczki!
         curr_char = self.__get_char()
         position = self.__get_position()
         if curr_char == '"':

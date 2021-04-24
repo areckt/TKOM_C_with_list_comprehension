@@ -253,6 +253,14 @@ class LexerTest(unittest.TestCase):
         expected_tokens = [Token(TokenType.FLOAT_LITERAL, 36.7)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
+    def test_float_literal_with_two_points(self):
+        input_str = "36.7.0"
+        expected_tokens = [
+            Token(TokenType.FLOAT_LITERAL, 36.7),
+            Token(TokenType.UNKNOWN, "0")
+        ]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
     def test_float_literal_smaller_than_one(self):
         input_str = "0.12345"
         expected_tokens = [Token(TokenType.FLOAT_LITERAL, 0.12345)]
