@@ -83,7 +83,7 @@ class Token:
     # used for debugging
     def __repr__(self):
         rep = str(self.type.name).ljust(26) + str(self.value).ljust(26) + \
-              "line: " + str(self.line) + str(" ,") + str(self.column)
+              "line: " + str(self.line) + str(", column: ") + str(self.column)
         # rep = f'{self.type.name} \t {self.value} \t pos({self.line}, {self.column})'
         return rep
 
@@ -126,6 +126,26 @@ class TokenDicts:
     }
 
     two_char_tokens = {
+        '&&':       TokenType.AND,
+        '||':       TokenType.OR,
+        '<=':       TokenType.LESS_OR_EQUAL,
+        '==':       TokenType.EQUAL,
+        '!=':       TokenType.NOT_EQUAL,
+        '>=':       TokenType.GREATER_OR_EQUAL
+    }
+
+    allowed_after_number = {
+        ';':        TokenType.SEMICOLON,
+        ',':        TokenType.COMMA,
+        ')':        TokenType.CLOSE_BRACKET,
+        '}':        TokenType.CLOSE_BLOCK,
+        ']':        TokenType.CLOSE_LIST,
+        '+':        TokenType.PLUS,
+        '-':        TokenType.MINUS,
+        '*':        TokenType.MULTIPLY,
+        '/':        TokenType.DIVIDE,
+        '<':        TokenType.LESS,
+        '>':        TokenType.GREATER,
         '&&':       TokenType.AND,
         '||':       TokenType.OR,
         '<=':       TokenType.LESS_OR_EQUAL,
