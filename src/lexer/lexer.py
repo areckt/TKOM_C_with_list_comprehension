@@ -163,7 +163,8 @@ class Lexer:
 
                 # if there's second point
                 if digit_candidate == '.':
-                    value = '0' + '.' + str(value) + '.'
+                    value = value * 10**(point_position - current_column + 1)
+                    value = str(value) + '.'
                     point_position = self.__get_position()
                     digit_candidate = self.__move_and_get_char()
                     while digit_candidate not in TokenDicts.allowed_after_number:
