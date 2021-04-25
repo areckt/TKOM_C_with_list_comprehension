@@ -138,7 +138,7 @@ class Lexer:
                         value = '0' + '.' + str(value) + '.'
                         point_position = self.__get_position()
                         digit_candidate = self.__move_and_get_char()
-                        while digit_candidate not in TokenDicts.allowed_after_number:
+                        while digit_candidate and digit_candidate not in TokenDicts.allowed_after_number:
                             value += str(digit_candidate)
                             digit_candidate = self.__move_and_get_char()
                         LexerError(point_position, "float number has at least 2 points and/or other bad characters").warning()
@@ -167,7 +167,7 @@ class Lexer:
                     value = str(value) + '.'
                     point_position = self.__get_position()
                     digit_candidate = self.__move_and_get_char()
-                    while digit_candidate not in TokenDicts.allowed_after_number:
+                    while digit_candidate and digit_candidate not in TokenDicts.allowed_after_number:
                         value += str(digit_candidate)
                         digit_candidate = self.__move_and_get_char()
                     LexerError(point_position,
