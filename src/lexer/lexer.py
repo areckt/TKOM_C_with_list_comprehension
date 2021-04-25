@@ -132,6 +132,18 @@ class Lexer:
                         value = value * 10 + int(digit_candidate)
                         digit_candidate = self.__move_and_get_char()
                     _, current_column = self.__get_position()
+
+                    # if there's second point
+                    if digit_candidate == '.':
+                        value = '0' + '.' + str(value) + '.'
+                        point_position = self.__get_position()
+                        digit_candidate = self.__move_and_get_char()
+                        while digit_candidate not in TokenDicts.allowed_after_number:
+                            value += str(digit_candidate)
+                            digit_candidate = self.__move_and_get_char()
+                        LexerError(point_position, "float number has at least 2 points and/or other bad characters").warning()
+                        return Token(TokenType.UNKNOWN, value)
+
                     return Token(TokenType.FLOAT_LITERAL, value * 10**(point_position - current_column + 1))
 
             # if we have number >= 1
@@ -148,6 +160,19 @@ class Lexer:
                     value = value * 10 + int(digit_candidate)
                     digit_candidate = self.__move_and_get_char()
                 _, current_column = self.__get_position()
+
+                # if there's second point
+                if digit_candidate == '.':
+                    value = '0' + '.' + str(value) + '.'
+                    point_position = self.__get_position()
+                    digit_candidate = self.__move_and_get_char()
+                    while digit_candidate not in TokenDicts.allowed_after_number:
+                        value += str(digit_candidate)
+                        digit_candidate = self.__move_and_get_char()
+                    LexerError(point_position,
+                               "float number has at least 2 points and/or other bad characters").warning()
+                    return Token(TokenType.UNKNOWN, value)
+
                 return Token(TokenType.FLOAT_LITERAL, value * 10**(point_position - current_column + 1))
 
             # if there isn't a point we have int
@@ -168,7 +193,7 @@ class Lexer:
                 curr_char = self.__move_and_get_char()
                 if curr_char == "":
                     # if there's no closing quotation mark
-                    LexerError(position, "You forgot about closing quotation mark!")
+                    LexerError(position, "You forgot about closing quotation mark!").warning()
                     return Token(TokenType.UNKNOWN)
 
             self.__move_pointer()  # move to skip '"' quote
