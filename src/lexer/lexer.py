@@ -6,7 +6,6 @@ class Lexer:
     def __init__(self, source):
         self.__source = source
         self.token = None
-        # juz tu zawolac build_and_get_token (?)
 
     def get_token(self):
         return self.token
@@ -58,6 +57,7 @@ class Lexer:
                 new_char = self.__move_and_get_char()
                 if new_char == ']':
                     current_word += new_char
+                    self.__move_pointer()
                     # new_char = self.__move_and_get_char()
                 else:
                     LexerError(self.__get_position(), "UNKNOWN TOKEN").warning()
