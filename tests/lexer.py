@@ -408,6 +408,28 @@ class LexerTest(unittest.TestCase):
         ]
         self.assert_expected_tokens(input_str, expected_tokens)
 
+    def test_code_with_many_errors(self):
+        input_str = """ int[ foo(int[f] nums)
+                            string 2ad = "test'/
+                            retrun ad
+                        }"""
+        expected_tokens = [
+            Token(TokenType.UNKNOWN, "int["),
+            Token(TokenType.IDENTIFIER, "foo"),
+            Token(TokenType.OPEN_BRACKET),
+            Token(TokenType.UNKNOWN, "int["),
+            Token(TokenType.IDENTIFIER, "f"),
+            Token(TokenType.CLOSE_LIST),
+            Token(TokenType.IDENTIFIER, "nums"),
+            Token(TokenType.CLOSE_BRACKET),
+            Token(TokenType.STRING_KEYWORD),
+            Token(TokenType.INT_LITERAL, 2),
+            Token(TokenType.IDENTIFIER, "ad"),
+            Token(TokenType.ASSIGN),
+            Token(TokenType.UNKNOWN)
+        ]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
 
 if __name__ == '__main__':
     unittest.main()
