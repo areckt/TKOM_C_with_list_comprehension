@@ -1,5 +1,7 @@
-int foo(bar, baz){
-    string s = "Hello \n \t\"World\"";
-    int len = _s;
-    return len;
+int[] lengthList() {
+    string[] a = ["this", "is"];
+    string[] b = ["example", "text"];
+    string[] c = a + b;
+    int[] result = [_word for word in c];
+    return result;
 }
