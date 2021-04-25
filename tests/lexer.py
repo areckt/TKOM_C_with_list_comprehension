@@ -253,12 +253,14 @@ class LexerTest(unittest.TestCase):
         expected_tokens = [Token(TokenType.FLOAT_LITERAL, 36.7)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
-    def test_float_literal_with_two_points(self):
-        input_str = "36.7.0"
-        expected_tokens = [
-            Token(TokenType.FLOAT_LITERAL, 36.7),
-            Token(TokenType.UNKNOWN, "0")
-        ]
+    def test_float_literal_with_two_points_starting_with_zero(self):
+        input_str = "0.5.5a5..5...f5"
+        expected_tokens = [Token(TokenType.UNKNOWN, "0.5.5a5..5...f5")]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_float_literal_with_two_points_starting_with_nonzero(self):
+        input_str = "5.5.5a5..5...f5"
+        expected_tokens = [Token(TokenType.UNKNOWN, "5.5.5a5..5...f5")]
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_float_literal_smaller_than_one(self):
@@ -274,6 +276,11 @@ class LexerTest(unittest.TestCase):
     def test_string_literal_with_escape_characters(self):
         input_str = '''"example\\n \\\"string\\t123 !@#"'''
         expected_tokens = [Token(TokenType.STRING_LITERAL, '''example\\n \\\"string\\t123 !@#''')]
+        self.assert_expected_tokens(input_str, expected_tokens)
+
+    def test_string_literal_ending_with_escape_character(self):
+        input_str = '''"very bad string\\"'''
+        expected_tokens = [Token(TokenType.UNKNOWN)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_string_literal_with_no_closing_quotation_mark(self):
