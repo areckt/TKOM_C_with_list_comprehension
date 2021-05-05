@@ -192,6 +192,27 @@ class Lexer:
                 string += curr_char
                 prev_char = curr_char
                 curr_char = self.__move_and_get_char()
+                if prev_char == "\\":
+                    if curr_char == 'n':
+                        string = string[:-1]
+                        string += '\n'
+                        prev_char = curr_char
+                        curr_char = self.__move_and_get_char()
+                    elif curr_char == 't':
+                        string = string[:-1]
+                        string += '\t'
+                        prev_char = curr_char
+                        curr_char = self.__move_and_get_char()
+                    elif curr_char == '\\':
+                        string = string[:-1]
+                        string += '\\'
+                        prev_char = None
+                        curr_char = self.__move_and_get_char()
+                    elif curr_char == '"':
+                        string = string[:-1]
+                        string += '"'
+                        prev_char = curr_char
+                        curr_char = self.__move_and_get_char()
                 if curr_char == "":
                     # if there's no closing quotation mark
                     LexerError(position, "You forgot about closing quotation mark!").warning()
