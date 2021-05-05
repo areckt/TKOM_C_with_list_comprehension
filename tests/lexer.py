@@ -274,8 +274,9 @@ class LexerTest(unittest.TestCase):
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_string_literal_with_escape_characters(self):
-        input_str = '''"example\\n \\\"string\\t123 !@#"'''
-        expected_tokens = [Token(TokenType.STRING_LITERAL, '''example\\n \\\"string\\t123 !@#''')]
+        input_str = '''"ex\\\\ample\\n \\\"string\\t123 !@#"'''
+        expected_tokens = [Token(TokenType.STRING_LITERAL, '''ex\\ample
+ "string	123 !@#''')]
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_string_literal_ending_with_escape_character(self):
