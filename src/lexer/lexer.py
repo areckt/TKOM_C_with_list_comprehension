@@ -109,9 +109,9 @@ class Lexer:
         if candidate in TokenDicts.keywords:
             token_type = TokenDicts.keywords[candidate]
             return Token(token_type)
-        elif candidate != "" and '[' not in candidate:
+        elif candidate and '[' not in candidate:
             return Token(TokenType.IDENTIFIER, candidate)
-        elif candidate != "" and '[' in candidate:
+        elif candidate and '[' in candidate:
             return Token(TokenType.UNKNOWN, candidate)
         return None
 

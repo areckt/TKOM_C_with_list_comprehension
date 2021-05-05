@@ -9,10 +9,7 @@ def init_all(input_file):
     file = open(input_file, "r")
     source = Source(file)
     lexer = Lexer(source)
-    # print("init_all here!")
     token = lexer.build_and_get_token()
-    print("TOKEN TYPE".ljust(26) + "VALUE".ljust(26) + "POSITION")
-    print((10 * "\u203E").ljust(26) + (5*"\u203E").ljust(26) + 8*"\u203E")
     while token.get_type() != TokenType.EOF_SYMBOL:
         # for now I just print found tokens on screen
         print(token)
