@@ -94,7 +94,7 @@ class LexerTest(unittest.TestCase):
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_int_list_keyword(self):
-        input_str = "int[]"
+        input_str = "lint"
         expected_tokens = [Token(TokenType.INT_LIST_KEYWORD)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
@@ -104,7 +104,7 @@ class LexerTest(unittest.TestCase):
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_float_list_keyword(self):
-        input_str = "float[]"
+        input_str = "lfloat"
         expected_tokens = [Token(TokenType.FLOAT_LIST_KEYWORD)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
@@ -114,7 +114,7 @@ class LexerTest(unittest.TestCase):
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_string_list_keyword(self):
-        input_str = "string[]"
+        input_str = "lstring"
         expected_tokens = [Token(TokenType.STRING_LIST_KEYWORD)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
@@ -290,8 +290,8 @@ class LexerTest(unittest.TestCase):
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_unknown(self):
-        input_str = "list["
-        expected_tokens = [Token(TokenType.UNKNOWN, "list[")]
+        input_str = "^"
+        expected_tokens = [Token(TokenType.UNKNOWN)]
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_longer_code_1(self):
@@ -376,8 +376,8 @@ class LexerTest(unittest.TestCase):
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_longer_code_3(self):
-        input_str = """ int[] squareList(int[] nums) {
-                            int[] result = [n*n for n in nums];
+        input_str = """ lint squareList(lint nums) {
+                            lint result = [n*n for n in nums];
                             return !result;
                         }"""
         expected_tokens = [
@@ -410,15 +410,16 @@ class LexerTest(unittest.TestCase):
         self.assert_expected_tokens(input_str, expected_tokens)
 
     def test_code_with_many_errors(self):
-        input_str = """ int[ foo(int[f] nums)
+        input_str = """ int foo(int[f] nums)
                             string 2ad = "test'/
                             retrun ad
                         }"""
         expected_tokens = [
-            Token(TokenType.UNKNOWN, "int["),
+            Token(TokenType.INT_KEYWORD),
             Token(TokenType.IDENTIFIER, "foo"),
             Token(TokenType.OPEN_BRACKET),
-            Token(TokenType.UNKNOWN, "int["),
+            Token(TokenType.INT_KEYWORD),
+            Token(TokenType.OPEN_LIST),
             Token(TokenType.IDENTIFIER, "f"),
             Token(TokenType.CLOSE_LIST),
             Token(TokenType.IDENTIFIER, "nums"),

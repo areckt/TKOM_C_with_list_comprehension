@@ -51,17 +51,6 @@ class Lexer:
                 current_word += new_char
                 new_char = self.__move_and_get_char()
 
-            # check if not list type - are there brackets []?
-            if new_char == '[':
-                current_word += new_char
-                new_char = self.__move_and_get_char()
-                if new_char == ']':
-                    current_word += new_char
-                    self.__move_pointer()
-                    # new_char = self.__move_and_get_char()
-                else:
-                    LexerError(self.__get_position(), "UNKNOWN TOKEN").warning()
-
         return current_word
 
     def __move_pointer(self):

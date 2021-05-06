@@ -53,11 +53,11 @@ class TokenType(Enum):
     FOR_KEYWORD = auto()            # 'for'
     IN_KEYWORD = auto()             # 'in'
     INT_KEYWORD = auto()            # 'int'
-    INT_LIST_KEYWORD = auto()       # 'int[]'
+    INT_LIST_KEYWORD = auto()       # 'lint'
     FLOAT_KEYWORD = auto()          # 'float'
-    FLOAT_LIST_KEYWORD = auto()     # 'float[]'
+    FLOAT_LIST_KEYWORD = auto()     # 'lfloat'
     STRING_KEYWORD = auto()         # 'string'
-    STRING_LIST_KEYWORD = auto()    # 'string[]'
+    STRING_LIST_KEYWORD = auto()    # 'lstring'
 
     UNKNOWN = auto()
 
@@ -97,11 +97,11 @@ class TokenDicts:
         'for': TokenType.FOR_KEYWORD,
         'in': TokenType.IN_KEYWORD,
         'int': TokenType.INT_KEYWORD,
-        'int[]': TokenType.INT_LIST_KEYWORD,
+        'lint': TokenType.INT_LIST_KEYWORD,
         'float': TokenType.FLOAT_KEYWORD,
-        'float[]': TokenType.FLOAT_LIST_KEYWORD,
+        'lfloat': TokenType.FLOAT_LIST_KEYWORD,
         'string': TokenType.STRING_KEYWORD,
-        'string[]': TokenType.STRING_LIST_KEYWORD
+        'lstring': TokenType.STRING_LIST_KEYWORD
     }
 
     one_char_tokens = {
