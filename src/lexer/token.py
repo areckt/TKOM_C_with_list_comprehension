@@ -48,7 +48,7 @@ class TokenType(Enum):
     # keywords
     RETURN_KEYWORD = auto()         # 'return'
     WHILE_KEYWORD = auto()          # 'while'
-    IF_KEYWORD = auto()             # 'for'
+    IF_KEYWORD = auto()             # 'if'
     ELSE_KEYWORD = auto()           # 'else'
     FOR_KEYWORD = auto()            # 'for'
     IN_KEYWORD = auto()             # 'in'
