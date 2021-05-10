@@ -3,17 +3,20 @@ import sys
 from src.lexer.source import Source
 from src.lexer.lexer import Lexer
 from src.lexer.token import TokenType
+from src.parser.parser import Parser
 
 
 def init_all(input_file):
     file = open(input_file, "r")
     source = Source(file)
     lexer = Lexer(source)
-    token = lexer.build_and_get_token()
-    while token.get_type() != TokenType.EOF_SYMBOL:
-        # for now I just print found tokens on screen
-        print(token)
-        token = lexer.build_and_get_token()
+    # token = lexer.build_and_get_token()
+    # while token.get_type() != TokenType.EOF_SYMBOL:
+    #     # for now I just print found tokens on screen
+    #     print(token)
+    #     token = lexer.build_and_get_token()
+    parser = Parser(lexer)
+    parser.parse_program()
 
 
 def main():
