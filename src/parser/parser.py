@@ -1,5 +1,4 @@
 from src.error_handling import ParserError, ParserSyntaxError
-from src.lexer.token import TokenType
 from src.parser.ast.complex import *
 from src.parser.ast.semi_complex import *
 from src.parser.ast.primitives import *
@@ -47,7 +46,7 @@ class Parser:
             return possible_variable_declaration
 
         self.__consume_token(TokenType.SEMICOLON)
-        return VariableDeclaration(possible_variable_declaration, id_token)
+        return VariableDeclaration(possible_type_token, id_token)
 
     def __parse_function_declaration(self, type_token, id_token):
         if not self.__check_token(TokenType.OPEN_BRACKET):
@@ -111,7 +110,6 @@ class Parser:
     def __parse_r_value(self):
         return self.__parse_arithmetic_expression()  # TODO condition
 
-    # TODO all these parse methods...
     def __parse_arithmetic_expression(self):
         result = self.__parse_multiplicative_factor()
 
