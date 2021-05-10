@@ -7,7 +7,7 @@ class Literal(AstNode):
         self.type, self.value = Literal.init_literal(literal_token)
 
     def __repr__(self):
-        return f'literal={self.value}'
+        return f'literal: {self.value}'
 
     @staticmethod
     def init_literal(literal_token):

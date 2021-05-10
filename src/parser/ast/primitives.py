@@ -51,7 +51,7 @@ class Id(AstNode):
             self.name = id_token.get_value()
 
     def __repr__(self):
-        return f'id={self.name}'
+        return f'id: {self.name}'
 
 
 class Type(AstNode):
