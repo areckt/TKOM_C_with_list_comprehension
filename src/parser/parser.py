@@ -28,7 +28,7 @@ class Parser:
                                self.__parse_if()
 
         if not possible_instruction:
-            ParserError(self.__get_position(), "UNKNOWN INSTRUCTION").warning()
+            ParserError(self.__get_position(), "unknown instruction").warning()
         return possible_instruction
 
     def __parse_declaration(self):
@@ -97,7 +97,7 @@ class Parser:
         if possible_function_invocation:
             return possible_function_invocation
 
-        ParserError(self.__get_position(), f'INVALID TOKEN AFTER ID: {self.__get_current_token()}!').fatal()
+        ParserError(self.__get_position(), f'invalid token after id: {self.__get_current_token()}!').fatal()
 
     def __parse_assignment(self, id_token):
         if not self.__check_token(TokenType.ASSIGN):
@@ -113,16 +113,135 @@ class Parser:
 
     # TODO all these parse methods...
     def __parse_arithmetic_expression(self):
-        pass
+        result = self.__parse_multiplicative_factor()
+
+        if result:
+            additive_token = self.__check_if_one_of_tokens(ParserUtils.additive_operator_tokens)
+            while additive_token:
+                result = ArithmeticExpression(result,
+                                              ArithmeticOperator(additive_token),
+                                              self.__parse_multiplicative_factor())
+                additive_token = self.__check_if_one_of_tokens(ParserUtils.additive_operator_tokens)
+
+        return result
+
+    def __parse_multiplicative_factor(self):
+        multiplicative_factor = self.__parse_additive_factor()
+
+        if multiplicative_factor:
+            possible_multiplicative_token = self.__check_if_one_of_tokens(ParserUtils.multiplicative_operator_tokens)
+            while possible_multiplicative_token:
+                multiplicative_factor = ArithmeticExpression(multiplicative_factor,
+                                                             ArithmeticOperator(possible_multiplicative_token),
+                                                             self.__parse_additive_factor())
+                possible_multiplicative_token = self.__check_if_one_of_tokens(
+                    ParserUtils.multiplicative_operator_tokens)
+
+        return multiplicative_factor
+
+    def __parse_additive_factor(self):
+        additive_factor = self.__parse_id_or_literal()
+
+        if not additive_factor and self.__check_token(TokenType.OPEN_BRACKET):
+            additive_factor = self.__parse_arithmetic_expression()
+            self.__consume_token(TokenType.CLOSE_BRACKET)
+
+        return additive_factor
+
+    def __parse_condition(self):
+        possible_left_id_or_literal = self.__parse_id_or_literal()
+        if not possible_left_id_or_literal:
+            return None
+
+        possible_comparison_token = self.__check_if_one_of_tokens(ParserUtils.comparison_tokens)
+        if possible_comparison_token:
+            possible_right_id_or_literal = self.__parse_id_or_literal()
+            if not possible_right_id_or_literal:
+                ParserError(self.__get_position(),
+                            f'expected literal or id, instead got {self.__get_current_token()}').fatal()
+            return SingleCondition(possible_left_id_or_literal, possible_comparison_token, possible_right_id_or_literal)
+        return possible_left_id_or_literal
+
+    def __parse_function_invocation(self, id_token):
+        if not self.__check_token(TokenType.OPEN_BRACKET):
+            return None
+
+        arguments = self.__parse_function_invocation_arguments()
+        self.__consume_token(TokenType.CLOSE_BRACKET)
+        self.__consume_token(TokenType.SEMICOLON)
+
+        return FunctionInvocation(id_token, arguments)
+
+    def __parse_function_invocation_arguments(self):
+        possible_argument = self.__parse_arithmetic_expression()
+        if not possible_argument:
+            return []
+
+        arguments_so_far = [possible_argument]
+        while self.__check_token(TokenType.COMMA):
+            arguments_so_far.append(self.__parse_arithmetic_expression())
+
+        return arguments_so_far
+
+    def __parse_id_or_literal(self):
+        possible_literal = self.__check_if_one_of_tokens(ParserUtils.literal_tokens)
+        if possible_literal:
+            return Literal(possible_literal)
+
+        possible_id = self.__check_token(TokenType.IDENTIFIER)
+        if possible_id:
+            return Id(possible_id)
+
+        return None
 
     def __parse_return(self):
-        pass
+        if not self.__check_token(TokenType.RETURN_KEYWORD):
+            return None
+
+        possible_return_value = self.__parse_r_value()
+        self.__consume_token(TokenType.SEMICOLON)
+
+        return ReturnExpression(possible_return_value)
 
     def __parse_while(self):
-        pass
+        if not self.__check_token(TokenType.WHILE_KEYWORD):
+            return None
+
+        self.__consume_token(TokenType.OPEN_BRACKET)
+        condition = self.__parse_condition()
+        if condition is None:
+            ParserError(self.__get_position(), 'no condition in while statement').fatal()
+        self.__consume_token(TokenType.CLOSE_BRACKET)
+        self.__consume_token(TokenType.OPEN_BLOCK)
+        instructions = self.__parse_scope()
+        return WhileStatement(condition, instructions)
 
     def __parse_if(self):
-        pass
+        if not self.__check_token(TokenType.IF_KEYWORD):
+            return None
+
+        self.__consume_token(TokenType.OPEN_BRACKET)
+        condition = self.__parse_condition()
+        if condition is None:
+            ParserError(self.__get_position(), 'no condition in if statement').fatal()
+        self.__consume_token(TokenType.CLOSE_BRACKET)
+        self.__consume_token(TokenType.OPEN_BLOCK)
+        if_instructions = self.__parse_scope()
+
+        else_instructions = []
+        if self.__check_token(TokenType.ELSE_KEYWORD):
+            self.__consume_token(TokenType.OPEN_BLOCK)
+            else_instructions = self.__parse_scope()
+
+        return IfStatement(condition, if_instructions, else_instructions)
+
+    def __parse_scope(self):
+        scope = []
+        while not self.__check_token(TokenType.CLOSE_BLOCK):
+            new_instruction = self.__parse_instruction()
+            scope.append(new_instruction)
+
+        return scope
 
     # vvv   G E T T E R S   vvv
 
