@@ -57,6 +57,41 @@ class ParserTest(unittest.TestCase):
         var_type = program[0].type
         self.assertTrue(isinstance(var_type, Type))
 
+    def test_variable_declaration_with_forbidden_id_1(self):
+        input_str = """int for = 5;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_variable_declaration_with_forbidden_id_2(self):
+        input_str = """float while = 36.7;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_variable_declaration_with_forbidden_id_3(self):
+        input_str = """string else = "great!";"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_variable_declaration_with_forbidden_id_4(self):
+        input_str = """int int = 5;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_variable_declaration_with_forbidden_id_5(self):
+        input_str = """float float = 36.7;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_variable_declaration_with_forbidden_id_6(self):
+        input_str = """string string = "great!";"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
 
 
 if __name__ == '__main__':

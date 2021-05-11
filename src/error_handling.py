@@ -5,8 +5,9 @@ class GenericError(Exception):
         super().__init__(self.message)
 
     def fatal(self):
-        print(self.message)
-        exit(-1)
+        # print(self.message)
+        raise Exception(self.message)
+        # exit(-1)
 
     def warning(self):
         print(self.message)
