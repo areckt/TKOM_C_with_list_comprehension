@@ -133,9 +133,22 @@ class Parser:
             return None
 
         value = self.__parse_r_value()
-        self.__consume_token(TokenType.SEMICOLON)
 
-        return VariableAssignment(id_token, value)
+        if value:
+            self.__consume_token(TokenType.SEMICOLON)
+            return VariableAssignment(id_token, value)
+
+        else:
+            self.__consume_token(TokenType.OPEN_LIST)
+            value = self.__parse_arithmetic_expression()
+            values = [value]
+
+            while self.__check_token(TokenType.COMMA):
+                values.append(self.__parse_arithmetic_expression())
+
+            self.__consume_token(TokenType.CLOSE_LIST)
+            self.__consume_token(TokenType.SEMICOLON)
+            return ListVariableAssignment(id_token, values)
 
     def __parse_r_value(self):
         return self.__parse_arithmetic_expression()  # TODO condition

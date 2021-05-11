@@ -61,6 +61,18 @@ class VariableAssignment(AstNode):
         return f'VarAssign: {self.name} = {self.value};'
 
 
+class ListVariableAssignment(AstNode):
+    def __init__(self, id_token, values):
+        self.name = Id(id_token)
+        self.values = values
+
+    def __repr__(self):
+        values_str = str(self.values)
+        if len(self.values) == 0:
+            values_str = ''
+        return f'ListVarAssign: {self.name} = values: {values_str}'
+
+
 class FunctionArgument(AstNode):
     def __init__(self, type_token, id_token):
         self.type = Type(type_token)
