@@ -184,6 +184,50 @@ class ParserTest(unittest.TestCase):
         values = [literal.get_value() for literal in program[0].values]
         self.assertEqual(values, ["a", "b", "c"])
 
+    # STANDARD TYPE ASSIGNMENT
+    def test_int_variable_assignment(self):
+        input_str = """i = 5;"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_float_variable_assignment(self):
+        input_str = """temp = 36.7;"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_string_variable_assignment(self):
+        input_str = """char = "a";"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    # LIST TYPE ASSIGNMENT
+    def test_lint_variable_assignment(self):
+        input_str = """nums = [1, 2, 3];"""
+        list_of_expected = [ListVariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_lfloat_variable_assignment(self):
+        input_str = """nums = [1.1, 2.2, 3.3];"""
+        list_of_expected = [ListVariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_lstring_variable_assignment(self):
+        input_str = """chars = ["a", "b", "c"];"""
+        list_of_expected = [ListVariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
 
 if __name__ == '__main__':
     unittest.main()
