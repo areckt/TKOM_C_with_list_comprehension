@@ -9,6 +9,9 @@ class Literal(AstNode):
     def __repr__(self):
         return f'literal: {self.value}'
 
+    def get_value(self):
+        return self.value
+
     @staticmethod
     def init_literal(literal_token):
         literal_type = literal_token.get_type()
@@ -22,16 +25,31 @@ class Literal(AstNode):
 
 
 class VariableDeclaration(AstNode):
-    def __init__(self, type_token, id_token, value=None):
+    # def __init__(self, type_token, id_token, value=None):
+    def __init__(self, type_token, id_token, value):
         self.type = Type(type_token)
         self.name = Id(id_token)
-        if value is None:
-            self.value = Literal(Type.get_default_value(self.type))
-        else:
-            self.value = value
+        self.value = value
+        # if value is None:
+        #     self.value = Literal(Type.get_default_value(self.type))
+        # else:
+        #     self.value = value
 
     def __repr__(self):
         return f'VarDecl: {self.type} {self.name} = {self.value};'
+
+
+class ListVariableDeclaration(AstNode):
+    def __init__(self, type_token, id_token, values):
+        self.type = Type(type_token)
+        self.name = Id(id_token)
+        self.values = values
+
+    def __repr__(self):
+        values_str = str(self.values)
+        if len(self.values) == 0:
+            values_str = ''
+        return f'ListVarDecl: {self.name} = values: {values_str}'
 
 
 class VariableAssignment(AstNode):
@@ -94,5 +112,5 @@ class ReturnExpression(AstNode):
     def __repr__(self):
         return_value = ''
         if self.value is not None:
-            return_value = ':' + str(self.value)
+            return_value = str(self.value)
         return f'Return: {return_value};'

@@ -2,12 +2,9 @@ from src.lexer.token import TokenType
 
 
 class ParserUtils:
-    forbidden_ids = ['return', 'while', 'if', 'else', 'for', 'in',
-                     'int', 'lint', 'float', 'lfloat', 'string', 'lstring']
+    type_tokens = [TokenType.INT_KEYWORD, TokenType.FLOAT_KEYWORD, TokenType.STRING_KEYWORD]
 
-    type_tokens = [TokenType.INT_KEYWORD, TokenType.INT_LIST_KEYWORD,
-                   TokenType.FLOAT_KEYWORD, TokenType.FLOAT_LIST_KEYWORD,
-                   TokenType.STRING_KEYWORD, TokenType.STRING_LIST_KEYWORD]
+    list_type_tokens = [TokenType.INT_LIST_KEYWORD, TokenType.FLOAT_LIST_KEYWORD, TokenType.STRING_LIST_KEYWORD]
 
     literal_tokens = [TokenType.INT_LITERAL, TokenType.FLOAT_LITERAL, TokenType.STRING_LITERAL]
 

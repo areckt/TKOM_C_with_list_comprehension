@@ -32,8 +32,13 @@ class Parser:
 
     def __parse_declaration(self):
         possible_type_token = self.__check_if_one_of_tokens(ParserUtils.type_tokens)
+        list_type_flag = False
         if not possible_type_token:
-            return None
+            possible_type_token = self.__check_if_one_of_tokens(ParserUtils.list_type_tokens)
+            if not possible_type_token:
+                return None
+            else:
+                list_type_flag = True
 
         id_token = self.__consume_token(TokenType.IDENTIFIER)
 
@@ -41,12 +46,19 @@ class Parser:
         if possible_function_declaration:
             return possible_function_declaration
 
-        possible_variable_declaration = self.__parse_variable_declaration(possible_type_token, id_token)
-        if possible_variable_declaration:
-            return possible_variable_declaration
+        if not list_type_flag:
+            possible_variable_declaration = self.__parse_variable_declaration(possible_type_token, id_token)
+            if possible_variable_declaration:
+                return possible_variable_declaration
+        else:
+            possible_list_variable_declaration = self.__parse_list_variable_declaration(possible_type_token, id_token)
+            if possible_list_variable_declaration:
+                return possible_list_variable_declaration
 
-        self.__consume_token(TokenType.SEMICOLON)
-        return VariableDeclaration(possible_type_token, id_token)
+        ParserError(self.__get_position(), "declaration error").fatal()
+
+        # self.__consume_token(TokenType.SEMICOLON)
+        # return VariableDeclaration(possible_type_token, id_token)
 
     def __parse_function_declaration(self, type_token, id_token):
         if not self.__check_token(TokenType.OPEN_BRACKET):
@@ -74,6 +86,24 @@ class Parser:
             arguments_so_far.append(FunctionArgument(type_token, id_token))
 
         return arguments_so_far
+
+    def __parse_list_variable_declaration(self, possible_type_token, id_token):
+        if not self.__check_token(TokenType.ASSIGN):
+            return None
+
+        self.__consume_token(TokenType.OPEN_LIST)
+        value = self.__parse_arithmetic_expression()
+        if value is None:
+            self.__consume_token(TokenType.CLOSE_LIST)
+            self.__consume_token(TokenType.SEMICOLON)
+            return ListVariableDeclaration(possible_type_token, id_token, [])
+        else:
+            values = [value]
+            while self.__check_token(TokenType.COMMA):
+                values.append(self.__parse_arithmetic_expression())
+            self.__consume_token(TokenType.CLOSE_LIST)
+            self.__consume_token(TokenType.SEMICOLON)
+            return ListVariableDeclaration(possible_type_token, id_token, values)
 
     def __parse_variable_declaration(self, possible_type_token, id_token):
         if not self.__check_token(TokenType.ASSIGN):

@@ -5,12 +5,15 @@ from src.lexer.token import TokenType, Token
 @unique
 class Types(Enum):
     INT = auto()
-    LINT = auto()
     FLOAT = auto()
-    LFLOAT = auto()
     STRING = auto()
-    LSTRING = auto()
 
+
+@unique
+class ListTypes(Enum):
+    LINT = auto()
+    LFLOAT = auto()
+    LSTRING = auto()
 
 @unique
 class ArithmeticOperatorTypes(Enum):
@@ -48,7 +51,10 @@ class Dictionaries:
     token_to_types = {
         TokenType.INT_KEYWORD: Types.INT,
         TokenType.FLOAT_KEYWORD: Types.FLOAT,
-        TokenType.STRING_KEYWORD: Types.STRING
+        TokenType.STRING_KEYWORD: Types.STRING,
+        TokenType.INT_LIST_KEYWORD: ListTypes.LINT,
+        TokenType.FLOAT_LIST_KEYWORD: ListTypes.LFLOAT,
+        TokenType.STRING_LIST_KEYWORD: ListTypes.LSTRING,
     }
 
     token_to_arithmetic_operator = {
@@ -93,9 +99,10 @@ class Dictionaries:
         LogicalOperatorTypes.AND: '&&',
 
         Types.INT: 'int',
-        Types.LINT: 'lint',
         Types.FLOAT: 'float',
-        Types.LFLOAT: 'lfloat',
         Types.STRING: 'string',
-        Types.LSTRING: 'lstring'
+
+        ListTypes.LINT: 'lint',
+        ListTypes.LFLOAT: 'lfloat',
+        ListTypes.LSTRING: 'lstring'
     }
