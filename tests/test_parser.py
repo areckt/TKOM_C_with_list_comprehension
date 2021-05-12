@@ -377,6 +377,36 @@ class ParserTest(unittest.TestCase):
         self.assert_instructions(program, list_of_expected)
 
     # COMMON MISTAKES
+    def test_missing_close_quotation_mark(self):
+        input_str = """string word = "error;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_missing_semicolon(self):
+        input_str = """lint nums = [1, 2, 3]"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_missing_bracket(self):
+        input_str = """float result = 2*(1+b / (c+2);"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_missing_close_list_bracket(self):
+        input_str = """lint nums = [1, 2, 3;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_missing_open_bracket(self):
+        input_str = """while i < 10){}"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
 
     # OTHER
 
