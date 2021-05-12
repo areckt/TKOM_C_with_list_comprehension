@@ -265,6 +265,121 @@ class ParserTest(unittest.TestCase):
         program = parser.parse_program()
         self.assert_instructions(program, list_of_expected)
 
+    # ARITHMETIC EXPRESSIONS
+    def test_arithmetic_expression_no_multiplication_no_brackets(self):
+        input_str = """i = a+b+c;"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_arithmetic_expression_multiplication_no_brackets(self):
+        input_str = """i = a+b*c;"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_arithmetic_expression_multiplication_brackets(self):
+        input_str = """i = a*(b+(c*d));"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    # FUNCTION DECLARATION
+    def test_function_declaration_no_args_no_body(self):
+        input_str = """int fun(){}"""
+        list_of_expected = [FunctionDeclaration]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_function_declaration_args_no_body(self):
+        input_str = """int fun(float t, string s){}"""
+        list_of_expected = [FunctionDeclaration]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_function_declaration_args_body(self):
+        input_str = """int fun(float t, string s){return 0;}"""
+        list_of_expected = [FunctionDeclaration]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    # FUNCTION INVOCATION
+    def test_function_invocation_no_args(self):
+        input_str = """fun();"""
+        list_of_expected = [FunctionInvocation]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_function_invocation_args(self):
+        input_str = """fun(10, temp, "Hey", 0.4);"""
+        list_of_expected = [FunctionInvocation]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    # RETURN
+    def test_return_no_value(self):
+        input_str = """return;"""
+        list_of_expected = [ReturnExpression]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_return_value(self):
+        input_str = """return i;"""
+        list_of_expected = [ReturnExpression]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    # WHILE
+    def test_while_no_body(self):
+        input_str = """while(i < 10){}"""
+        list_of_expected = [WhileStatement]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_while_body(self):
+        input_str = """while(i < 10){i = i + 1;}"""
+        list_of_expected = [WhileStatement]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    # IF & ELSE
+    def test_if_no_body_no_else(self):
+        input_str = """if(i > 10){}"""
+        list_of_expected = [IfStatement]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_if_body_no_else(self):
+        input_str = """if(i > 10){i = i - 1;}"""
+        list_of_expected = [IfStatement]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_if_body_else(self):
+        input_str = """if(i > 10){i = i - 1;}else{i = i * 2;}"""
+        list_of_expected = [IfStatement]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    # COMMON MISTAKES
+
+    # OTHER
+
 
 if __name__ == '__main__':
     unittest.main()
