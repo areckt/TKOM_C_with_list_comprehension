@@ -118,6 +118,43 @@ class ParserTest(unittest.TestCase):
         with self.assertRaises(Exception):
             parser.parse_program()
 
+    # DECLARATION WITH NO INITIALIZATION
+    def test_int_variable_declaration_without_initialization(self):
+        input_str = """int i;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_float_variable_declaration_without_initialization(self):
+        input_str = """float temp;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_string_variable_declaration_without_initialization(self):
+        input_str = """string s;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_lint_variable_declaration_without_initialization(self):
+        input_str = """lint nums;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_lfloat_variable_declaration_without_initialization(self):
+        input_str = """lfloat temps;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_lstring_variable_declaration_without_initialization(self):
+        input_str = """lstring chars;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
     # LINT DECLARATION
     def test_lint_list_declaration(self):
         input_str = """lint i = [1, 2, 3];"""
