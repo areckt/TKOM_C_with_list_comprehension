@@ -101,6 +101,21 @@ class Parser:
             values = [value]
             while self.__check_token(TokenType.COMMA):
                 values.append(self.__parse_arithmetic_expression())
+
+            # LIST COMPREHENSION --- check if there's 'for' keyword
+            if len(values) == 1 and self.__get_current_token().get_type() == TokenType.FOR_KEYWORD:
+                self.__consume_token(TokenType.FOR_KEYWORD)
+                for_id = self.__parse_id_or_literal()
+                self.__consume_token(TokenType.IN_KEYWORD)
+                in_expression = self.__parse_arithmetic_expression()
+                self.__consume_token(TokenType.CLOSE_LIST)
+                self.__consume_token(TokenType.SEMICOLON)
+                return ListComprehensionDeclaration(possible_type_token, id_token, value, for_id, in_expression)
+
+            # check for errors like: lint nums = [1, 2, n*n for n in nums];
+            elif len(values) > 1 and self.__get_current_token().get_type() == TokenType.FOR_KEYWORD:
+                ParserError(self.__get_position(), "list comprehension error").fatal()
+
             self.__consume_token(TokenType.CLOSE_LIST)
             self.__consume_token(TokenType.SEMICOLON)
             return ListVariableDeclaration(possible_type_token, id_token, values)
@@ -145,6 +160,20 @@ class Parser:
 
             while self.__check_token(TokenType.COMMA):
                 values.append(self.__parse_arithmetic_expression())
+
+            # LIST COMPREHENSION --- check if there's 'for' keyword
+            if len(values) == 1 and self.__get_current_token().get_type() == TokenType.FOR_KEYWORD:
+                self.__consume_token(TokenType.FOR_KEYWORD)
+                for_id = self.__parse_id_or_literal()
+                self.__consume_token(TokenType.IN_KEYWORD)
+                in_expression = self.__parse_arithmetic_expression()
+                self.__consume_token(TokenType.CLOSE_LIST)
+                self.__consume_token(TokenType.SEMICOLON)
+                return ListComprehensionAssignment(id_token, value, for_id, in_expression)
+
+            # check for errors like: lint nums = [1, 2, n*n for n in nums];
+            elif len(values) > 1 and self.__get_current_token().get_type() == TokenType.FOR_KEYWORD:
+                ParserError(self.__get_position(), "list comprehension error").fatal()
 
             self.__consume_token(TokenType.CLOSE_LIST)
             self.__consume_token(TokenType.SEMICOLON)

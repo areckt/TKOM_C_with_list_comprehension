@@ -52,6 +52,18 @@ class ListVariableDeclaration(AstNode):
         return f'ListVarDecl: {self.name} = values: {values_str}'
 
 
+class ListComprehensionDeclaration(AstNode):
+    def __init__(self, type_token, id_token, what_expression, for_id, in_expression):
+        self.type = Type(type_token)
+        self.name = Id(id_token)
+        self.what_expression = what_expression
+        self.for_id = for_id
+        self.in_expression = in_expression
+
+    def __repr__(self):
+        return f'ListCmprhnsnDecl: {self.name} = [{self.what_expression} for {self.for_id} in {self.in_expression}]'
+
+
 class VariableAssignment(AstNode):
     def __init__(self, id_token, value):
         self.name = Id(id_token)
@@ -71,6 +83,17 @@ class ListVariableAssignment(AstNode):
         if len(self.values) == 0:
             values_str = ''
         return f'ListVarAssign: {self.name} = values: {values_str}'
+
+
+class ListComprehensionAssignment(AstNode):
+    def __init__(self, id_token, what_expression, for_id, in_expression):
+        self.name = Id(id_token)
+        self.what_expression = what_expression
+        self.for_id = for_id
+        self.in_expression = in_expression
+
+    def __repr__(self):
+        return f'ListCmprhnsnAssign: {self.name} = [{self.what_expression} for {self.for_id} in {self.in_expression}]'
 
 
 class FunctionArgument(AstNode):
