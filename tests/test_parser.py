@@ -376,6 +376,27 @@ class ParserTest(unittest.TestCase):
         program = parser.parse_program()
         self.assert_instructions(program, list_of_expected)
 
+    # LIST COMPREHENSION
+    def test_list_comprehension_declaration(self):
+        input_str = """lint squares = [n*n for n in nums];"""
+        list_of_expected = [ListComprehensionDeclaration]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_list_comprehension_assignment(self):
+        input_str = """squares = [n*n for n in nums];"""
+        list_of_expected = [ListComprehensionAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_bad_list_declaration_with_list_comprehension_in_the_middle(self):
+        input_str = """lint squares = [1, 4, n*n for n in nums, 25];"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
     # COMMON MISTAKES
     def test_missing_close_quotation_mark(self):
         input_str = """string word = "error;"""
