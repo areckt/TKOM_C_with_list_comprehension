@@ -24,6 +24,15 @@ class Literal(AstNode):
             return Type(Token(TokenType.STRING_KEYWORD)), value
 
 
+class ListElement(AstNode):
+    def __init__(self, id_token, index):
+        self.name = id_token
+        self.index = index
+
+    def __repr__(self):
+        return f'ListElement: {self.name}[{self.index}]'
+
+
 class VariableDeclaration(AstNode):
     # def __init__(self, type_token, id_token, value=None):
     def __init__(self, type_token, id_token, value):
