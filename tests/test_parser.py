@@ -397,6 +397,28 @@ class ParserTest(unittest.TestCase):
         with self.assertRaises(Exception):
             parser.parse_program()
 
+    # LIST ELEMENTS
+    def test_assign_list_element_literal_index(self):
+        input_str = """temp = nums[2];"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_assign_list_element_id_index(self):
+        input_str = """temp = nums[i];"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_assign_list_element_arithmetic_expression_index(self):
+        input_str = """temp = nums[a*(2+b)/c];"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
     # COMMON MISTAKES
     def test_missing_close_quotation_mark(self):
         input_str = """string word = "error;"""
@@ -424,6 +446,18 @@ class ParserTest(unittest.TestCase):
 
     def test_missing_open_bracket(self):
         input_str = """while i < 10){}"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_assign_literal_to_list_type(self):
+        input_str = """lint nums = 2;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_assign_list_to_standard_type(self):
+        input_str = """int nums = [1, 2, 3];"""
         parser = init_parser_for_test(input_str)
         with self.assertRaises(Exception):
             parser.parse_program()
