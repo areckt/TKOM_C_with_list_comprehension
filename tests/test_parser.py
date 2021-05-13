@@ -419,6 +419,28 @@ class ParserTest(unittest.TestCase):
         program = parser.parse_program()
         self.assert_instructions(program, list_of_expected)
 
+    # EXTRA OPERATORS - '_' as length_op and '!' as reverse_op
+    def test_length_operator_in_assignment(self):
+        input_str = """length = _nums;"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_length_operator_in_declaration(self):
+        input_str = """int length = _nums;"""
+        list_of_expected = [VariableDeclaration]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_reverse_operator_in_assignment(self):
+        input_str = """temp = !nums;"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
     # COMMON MISTAKES
     def test_missing_close_quotation_mark(self):
         input_str = """string word = "error;"""
