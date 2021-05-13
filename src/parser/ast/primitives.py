@@ -68,7 +68,3 @@ class Type(AstNode):
 
     def __repr__(self):
         return Dictionaries.primitive_to_string[self.type]
-
-    @staticmethod
-    def get_default_value(type_node):
-        return Dictionaries.default_values[type_node.type]

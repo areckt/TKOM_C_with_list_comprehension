@@ -2,7 +2,6 @@ import sys
 
 from src.lexer.source import Source
 from src.lexer.lexer import Lexer
-from src.lexer.token import TokenType
 from src.parser.parser import Parser
 
 

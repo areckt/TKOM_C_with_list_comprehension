@@ -57,9 +57,6 @@ class Parser:
 
         ParserError(self.__get_position(), "declaration error").fatal()
 
-        # self.__consume_token(TokenType.SEMICOLON)
-        # return VariableDeclaration(possible_type_token, id_token)
-
     def __parse_function_declaration(self, type_token, id_token):
         if not self.__check_token(TokenType.OPEN_BRACKET):
             return None

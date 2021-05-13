@@ -8,13 +8,9 @@ class ParserUtils:
 
     literal_tokens = [TokenType.INT_LITERAL, TokenType.FLOAT_LITERAL, TokenType.STRING_LITERAL]
 
-    function_invocation_tokens = literal_tokens + [TokenType.IDENTIFIER]
-
     multiplicative_operator_tokens = [TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.MODULO]
 
     additive_operator_tokens = [TokenType.PLUS, TokenType.MINUS]
 
     comparison_tokens = [TokenType.EQUAL, TokenType.NOT_EQUAL, TokenType.GREATER,
                          TokenType.GREATER_OR_EQUAL, TokenType.LESS, TokenType.LESS_OR_EQUAL]
-
-    boolean_tokens = [TokenType.AND, TokenType.OR]

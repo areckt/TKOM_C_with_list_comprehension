@@ -5,15 +5,12 @@ class GenericError(Exception):
         super().__init__(self.message)
 
     def fatal(self):
-        # print(self.message)
         raise Exception(self.message)
-        # exit(-1)
 
     def warning(self):
         print(self.message)
 
 
-# let LexerError inherit from GenericError
 class LexerError(GenericError):
     def __init__(self, position, message):
         line, column = position
@@ -21,7 +18,6 @@ class LexerError(GenericError):
         super().__init__(self.message)
 
 
-# handling Parser errors
 class ParserError(GenericError):
     def __init__(self, position, message):
         line, column = position

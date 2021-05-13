@@ -41,15 +41,10 @@ class ListElement(AstNode):
 
 
 class VariableDeclaration(AstNode):
-    # def __init__(self, type_token, id_token, value=None):
     def __init__(self, type_token, id_token, value):
         self.type = Type(type_token)
         self.name = Id(id_token)
         self.value = value
-        # if value is None:
-        #     self.value = Literal(Type.get_default_value(self.type))
-        # else:
-        #     self.value = value
 
     def __repr__(self):
         return f'VarDecl: {self.type} {self.name} = {self.value};'
