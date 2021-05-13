@@ -260,7 +260,14 @@ class Parser:
 
         possible_id = self.__check_token(TokenType.IDENTIFIER)
         if possible_id:
-            return Id(possible_id)
+            # check if there's [expression], e.g. nums[3], nums[i], nums[a*(2+b)/c]
+            if self.__get_current_token().get_type() == TokenType.OPEN_LIST:
+                self.__consume_token(TokenType.OPEN_LIST)
+                index = self.__parse_arithmetic_expression()
+                self.__consume_token(TokenType.CLOSE_LIST)
+                return ListElement(Id(possible_id), index)
+            else:
+                return Id(possible_id)
 
         return None
 
