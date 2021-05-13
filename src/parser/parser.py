@@ -258,6 +258,15 @@ class Parser:
         if possible_literal:
             return Literal(possible_literal)
 
+        # check if there's '_' or '!' before id
+        calculate_len = is_reversed = False
+        if self.__get_current_token().get_type() == TokenType.LENGTH_OP:
+            calculate_len = True
+            self.__consume_token(TokenType.LENGTH_OP)
+        elif self.__get_current_token().get_type() == TokenType.NOT:
+            is_reversed = True
+            self.__consume_token(TokenType.NOT)
+
         possible_id = self.__check_token(TokenType.IDENTIFIER)
         if possible_id:
             # check if there's [expression], e.g. nums[3], nums[i], nums[a*(2+b)/c]
@@ -265,9 +274,9 @@ class Parser:
                 self.__consume_token(TokenType.OPEN_LIST)
                 index = self.__parse_arithmetic_expression()
                 self.__consume_token(TokenType.CLOSE_LIST)
-                return ListElement(Id(possible_id), index)
+                return ListElement(Id(possible_id), index, is_reversed, calculate_len)
             else:
-                return Id(possible_id)
+                return Id(possible_id, is_reversed, calculate_len)
 
         return None
 
