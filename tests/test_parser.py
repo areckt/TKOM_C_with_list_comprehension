@@ -484,8 +484,47 @@ class ParserTest(unittest.TestCase):
         with self.assertRaises(Exception):
             parser.parse_program()
 
+    # LONGER EXAMPLES
+    def test_nested_instructions(self):
+        input_str = """
+        int fun(int a, int b, int c){
+            return a+b+c;
+        }
 
-    # OTHER
+        int i = 1;
+        while(i < 15){
+            if(i<10){
+                i = i+10;
+                string str = "example";
+            }
+            else{
+                fun(1,2,3);
+            }
+        }
+        return 1;
+        """
+        parser = init_parser_for_test(input_str)
+
+        first_level = parser.parse_program()
+        first_level_expected = [FunctionDeclaration, VariableDeclaration, WhileStatement,
+                                ReturnExpression]
+
+        fun_decl = first_level[0].instructions
+        fun_decl_expected = [ReturnExpression]
+
+        while_stmt = first_level[2].instructions
+        while_stmt_expected = [IfStatement]
+
+        nested_if_stmt = while_stmt[0].if_instructions
+        nested_if_stmt_expected = [VariableAssignment, VariableDeclaration]
+        nested_else_stmt = while_stmt[0].else_instructions
+        nested_else_stmt_expected = [FunctionInvocation]
+
+        self.assert_instructions(first_level, first_level_expected)
+        self.assert_instructions(fun_decl, fun_decl_expected)
+        self.assert_instructions(while_stmt, while_stmt_expected)
+        self.assert_instructions(nested_if_stmt, nested_if_stmt_expected)
+        self.assert_instructions(nested_else_stmt, nested_else_stmt_expected)
 
 
 if __name__ == '__main__':
