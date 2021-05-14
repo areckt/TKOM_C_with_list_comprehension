@@ -177,7 +177,7 @@ class Parser:
             return ListVariableAssignment(id_token, values)
 
     def __parse_r_value(self):
-        return self.__parse_arithmetic_expression()  # TODO condition
+        return self.__parse_arithmetic_expression()
 
     def __parse_arithmetic_expression(self):
         result = self.__parse_multiplicative_factor()

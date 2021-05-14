@@ -42,12 +42,6 @@ class LogicalOperatorTypes(Enum):
 
 
 class Dictionaries:
-    default_values = {
-        Types.INT: Token(TokenType.INT_LITERAL, 0),
-        Types.FLOAT: Token(TokenType.FLOAT_LITERAL, 0.0),
-        Types.STRING: Token(TokenType.STRING_LITERAL, '')
-    }
-
     token_to_types = {
         TokenType.INT_KEYWORD: Types.INT,
         TokenType.FLOAT_KEYWORD: Types.FLOAT,
