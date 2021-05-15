@@ -419,9 +419,16 @@ class ParserTest(unittest.TestCase):
         program = parser.parse_program()
         self.assert_instructions(program, list_of_expected)
 
-    # EXTRA OPERATORS - '_' as length_op and '!' as reverse_op
-    def test_length_operator_in_assignment(self):
-        input_str = """length = _nums;"""
+    # UNARY OPERATORS - '-' as minus, '_' as length_op and '!' as reverse_op
+    def test_minus_as_unary_operator_in_declaration(self):
+        input_str = """float y = -x;"""
+        list_of_expected = [VariableDeclaration]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_minus_as_unary_operator_in_assignment(self):
+        input_str = """y = -x;"""
         list_of_expected = [VariableAssignment]
         parser = init_parser_for_test(input_str)
         program = parser.parse_program()
@@ -430,6 +437,13 @@ class ParserTest(unittest.TestCase):
     def test_length_operator_in_declaration(self):
         input_str = """int length = _nums;"""
         list_of_expected = [VariableDeclaration]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
+    def test_length_operator_in_assignment(self):
+        input_str = """length = _nums;"""
+        list_of_expected = [VariableAssignment]
         parser = init_parser_for_test(input_str)
         program = parser.parse_program()
         self.assert_instructions(program, list_of_expected)
@@ -462,6 +476,12 @@ class ParserTest(unittest.TestCase):
 
     def test_missing_close_list_bracket(self):
         input_str = """lint nums = [1, 2, 3;"""
+        parser = init_parser_for_test(input_str)
+        with self.assertRaises(Exception):
+            parser.parse_program()
+
+    def test_missing_close_block_bracket(self):
+        input_str = """while (i < 10){"""
         parser = init_parser_for_test(input_str)
         with self.assertRaises(Exception):
             parser.parse_program()

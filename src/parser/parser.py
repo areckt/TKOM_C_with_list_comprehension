@@ -27,7 +27,7 @@ class Parser:
                                self.__parse_if()
 
         if not possible_instruction:
-            ParserError(self.__get_position(), "unknown instruction").warning()
+            ParserError(self.__get_position(), "unknown instruction").fatal()
         return possible_instruction
 
     def __parse_declaration(self):
@@ -324,6 +324,8 @@ class Parser:
     def __parse_scope(self):
         scope = []
         while not self.__check_token(TokenType.CLOSE_BLOCK):
+            if self.__check_token(TokenType.EOF_SYMBOL):
+                ParserError(self.__get_position(), "missing close block bracket '}'").fatal()
             new_instruction = self.__parse_instruction()
             scope.append(new_instruction)
 
