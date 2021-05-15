@@ -46,19 +46,12 @@ class LogicalOperator(AstNode):
 
 
 class Id(AstNode):
-    def __init__(self, id_token, is_reversed=False, calculate_len=False):
+    def __init__(self, id_token):
         if TokenType.IDENTIFIER == id_token.get_type():
             self.name = id_token.get_value()
-            self.reversed = is_reversed
-            self.len = calculate_len
 
     def __repr__(self):
-        if not self.reversed and not self.len:
-            return f'id: {self.name}'
-        if self.reversed:
-            return f'id: reversed({self.name})'
-        if self.len:
-            return f'len( id: {self.name} )'
+        return f'id: {self.name}'
 
 
 class Type(AstNode):

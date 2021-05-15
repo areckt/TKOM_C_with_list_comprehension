@@ -15,4 +15,4 @@ class ParserUtils:
     comparison_tokens = [TokenType.EQUAL, TokenType.NOT_EQUAL, TokenType.GREATER,
                          TokenType.GREATER_OR_EQUAL, TokenType.LESS, TokenType.LESS_OR_EQUAL]
 
-    unary_operator_tokens = [TokenType.MODULO, TokenType.NOT, TokenType.MINUS]
+    unary_operator_tokens = [TokenType.LENGTH_OP, TokenType.NOT, TokenType.MINUS]

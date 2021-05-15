@@ -24,7 +24,7 @@ class ArithmeticOperatorTypes(Enum):
     DIVIDE = auto()
     MODULO = auto()
     NOT = auto()
-    LENGTH = auto()
+    LENGTH_OP = auto()
 
 
 @unique
@@ -61,7 +61,7 @@ class Dictionaries:
         TokenType.DIVIDE: ArithmeticOperatorTypes.DIVIDE,
         TokenType.MODULO: ArithmeticOperatorTypes.MODULO,
         TokenType.NOT: ArithmeticOperatorTypes.NOT,
-        TokenType.LENGTH_OP: ArithmeticOperatorTypes.LENGTH
+        TokenType.LENGTH_OP: ArithmeticOperatorTypes.LENGTH_OP
     }
 
     token_to_comparison_operator = {
@@ -85,6 +85,8 @@ class Dictionaries:
         ArithmeticOperatorTypes.MULTIPLY: '*',
         ArithmeticOperatorTypes.DIVIDE: '/',
         ArithmeticOperatorTypes.MODULO: '%',
+        ArithmeticOperatorTypes.LENGTH_OP: '_',
+        ArithmeticOperatorTypes.NOT: '!',
 
         ComparisonOperatorTypes.EQUAL: '==',
         ComparisonOperatorTypes.NOT_EQUAL: '!=',

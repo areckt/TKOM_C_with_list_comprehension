@@ -34,19 +34,12 @@ class UnaryOperation(AstNode):
 
 
 class ListElement(AstNode):
-    def __init__(self, id_token, index, is_reversed=False, calculate_len=False):
+    def __init__(self, id_token, index):
         self.name = id_token
         self.index = index
-        self.reversed = is_reversed
-        self.len = calculate_len
 
     def __repr__(self):
-        if not self.reversed and not self.len:
-            return f'ListElement: {self.name}[{self.index}]'
-        if self.reversed:
-            return f'ListElement: reversed({self.name}[{self.index}])'
-        if self.len:
-            return f'len( ListElement: {self.name}[{self.index}] )'
+        return f'ListElement: {self.name}[{self.index}]'
 
 
 class VariableDeclaration(AstNode):
