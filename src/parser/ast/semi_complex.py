@@ -24,6 +24,15 @@ class Literal(AstNode):
             return Type(Token(TokenType.STRING_KEYWORD)), value
 
 
+class UnaryOperation(AstNode):
+    def __init__(self, unary_operator, expression):
+        self.unary_operator = unary_operator
+        self.expression = expression
+
+    def __repr__(self):
+        return f'UnaryOp: {self.unary_operator} ({self.expression})'
+
+
 class ListElement(AstNode):
     def __init__(self, id_token, index, is_reversed=False, calculate_len=False):
         self.name = id_token

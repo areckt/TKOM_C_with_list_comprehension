@@ -15,6 +15,7 @@ class ListTypes(Enum):
     LFLOAT = auto()
     LSTRING = auto()
 
+
 @unique
 class ArithmeticOperatorTypes(Enum):
     PLUS = auto()
@@ -22,6 +23,8 @@ class ArithmeticOperatorTypes(Enum):
     MULTIPLY = auto()
     DIVIDE = auto()
     MODULO = auto()
+    NOT = auto()
+    LENGTH = auto()
 
 
 @unique
@@ -56,7 +59,9 @@ class Dictionaries:
         TokenType.MINUS: ArithmeticOperatorTypes.MINUS,
         TokenType.MULTIPLY: ArithmeticOperatorTypes.MULTIPLY,
         TokenType.DIVIDE: ArithmeticOperatorTypes.DIVIDE,
-        TokenType.MODULO: ArithmeticOperatorTypes.MODULO
+        TokenType.MODULO: ArithmeticOperatorTypes.MODULO,
+        TokenType.NOT: ArithmeticOperatorTypes.NOT,
+        TokenType.LENGTH_OP: ArithmeticOperatorTypes.LENGTH
     }
 
     token_to_comparison_operator = {

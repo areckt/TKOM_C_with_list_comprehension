@@ -209,11 +209,23 @@ class Parser:
     def __parse_additive_factor(self):
         additive_factor = self.__parse_id_or_literal()
 
+        if not additive_factor:
+            additive_factor = self.__parse_unary_operation()
+
         if not additive_factor and self.__check_token(TokenType.OPEN_BRACKET):
             additive_factor = self.__parse_arithmetic_expression()
             self.__consume_token(TokenType.CLOSE_BRACKET)
 
         return additive_factor
+
+    def __parse_unary_operation(self):
+        possible_unary_operator = self.__check_if_one_of_tokens(ParserUtils.unary_operator_tokens)
+        if not possible_unary_operator:
+            return None
+        expression = self.__parse_arithmetic_expression()
+        if not expression:
+            ParserError(self.__get_position(), "error in unary operation").fatal()
+        return UnaryOperation(ArithmeticOperator(possible_unary_operator), expression)
 
     def __parse_condition(self):
         possible_left_id_or_literal = self.__parse_id_or_literal()
