@@ -3,6 +3,10 @@ from src.parser.ast.complex import *
 from src.parser.ast.semi_complex import *
 from src.parser.ast.primitives import *
 from src.parser.parser_utils import ParserUtils
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
 
 
 class Parser:
@@ -15,7 +19,7 @@ class Parser:
         program = []
         while self.__get_current_token().get_type() != TokenType.EOF_SYMBOL:
             new_ins = self.__parse_instruction()
-            print(new_ins)
+            logging.info(new_ins)
             program.append(new_ins)
         return program
 
