@@ -1,7 +1,6 @@
-int[] lengthList() {
-    string[] a = ["this", "is"];
-    string[] b = ["example", "text"];
-    string[] c = a + b;
-    int[] result = [_word for word in c];
-    return result;
+int foo() {
+    int a = 25;
+    string s = "Hello";
+    lfloat f = [1.5*a for char in s];
+    return _f;
 }
