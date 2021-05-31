@@ -17,7 +17,7 @@ class ArithmeticOperator(AstNode):
         return Dictionaries.primitive_to_string[self.type]
 
     def accept(self, visitor):
-        visitor.visit_ArithmeticOperator()
+        return visitor.visit_arithmetic_operator(self)
 
 
 class ComparisonOperator(AstNode):
@@ -34,7 +34,7 @@ class ComparisonOperator(AstNode):
         return Dictionaries.primitive_to_string[self.type]
 
     def accept(self, visitor):
-        visitor.visit_ComparisonOperator()
+        return visitor.visit_comparison_operator(self)
 
 
 class LogicalOperator(AstNode):
@@ -51,7 +51,7 @@ class LogicalOperator(AstNode):
         return Dictionaries.primitive_to_string[self.type]
 
     def accept(self, visitor):
-        visitor.visit_LogicalOperator()
+        return visitor.visit_logical_operator(self)
 
 
 class Id(AstNode):
@@ -63,7 +63,7 @@ class Id(AstNode):
         return f'id: {self.name}'
 
     def accept(self, visitor):
-        visitor.visit_Id()
+        return visitor.visit_id(self)
 
 
 class Type(AstNode):
@@ -75,4 +75,4 @@ class Type(AstNode):
         return Dictionaries.primitive_to_string[self.type]
 
     def accept(self, visitor):
-        visitor.visit_Type()
+        return visitor.visit_type(self)

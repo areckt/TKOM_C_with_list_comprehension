@@ -13,7 +13,7 @@ class Literal(AstNode):
         return self.value
 
     def accept(self, visitor):
-        visitor.visit_Literal()
+        return visitor.visit_literal(self)
 
     @staticmethod
     def init_literal(literal_token):
@@ -36,7 +36,7 @@ class UnaryOperation(AstNode):
         return f'UnaryOp: {self.unary_operator} ({self.expression})'
 
     def accept(self, visitor):
-        visitor.visit_UnaryOperation()
+        return visitor.visit_unary_operation(self)
 
 
 class ListElement(AstNode):
@@ -48,7 +48,7 @@ class ListElement(AstNode):
         return f'ListElement: {self.name}[{self.index}]'
 
     def accept(self, visitor):
-        visitor.visit_ListElement()
+        return visitor.visit_list_element(self)
 
 
 class VariableDeclaration(AstNode):
@@ -61,7 +61,7 @@ class VariableDeclaration(AstNode):
         return f'VarDecl: {self.type} {self.name} = {self.value};'
 
     def accept(self, visitor):
-        visitor.visit_VariableDeclaration()
+        return visitor.visit_variable_declaration(self)
 
 
 class ListVariableDeclaration(AstNode):
@@ -77,7 +77,7 @@ class ListVariableDeclaration(AstNode):
         return f'ListVarDecl: {self.name} = values: {values_str}'
 
     def accept(self, visitor):
-        visitor.visit_ListVariableDeclaration()
+        return visitor.visit_list_variable_declaration(self)
 
 
 class ListComprehensionDeclaration(AstNode):
@@ -92,7 +92,7 @@ class ListComprehensionDeclaration(AstNode):
         return f'ListCmprhnsnDecl: {self.name} = [{self.what_expression} for {self.for_id} in {self.in_expression}]'
 
     def accept(self, visitor):
-        visitor.visit_ListComprehensionDeclaration()
+        return visitor.visit_list_comprehension_declaration(self)
 
 
 class VariableAssignment(AstNode):
@@ -104,7 +104,7 @@ class VariableAssignment(AstNode):
         return f'VarAssign: {self.name} = {self.value};'
 
     def accept(self, visitor):
-        visitor.visit_VariableAssignment()
+        return visitor.visit_variable_assignment(self)
 
 
 class ListVariableAssignment(AstNode):
@@ -119,7 +119,7 @@ class ListVariableAssignment(AstNode):
         return f'ListVarAssign: {self.name} = values: {values_str}'
 
     def accept(self, visitor):
-        visitor.visit_ListVariableAssignment()
+        return visitor.visit_list_variable_assignment(self)
 
 
 class ListComprehensionAssignment(AstNode):
@@ -133,7 +133,7 @@ class ListComprehensionAssignment(AstNode):
         return f'ListCmprhnsnAssign: {self.name} = [{self.what_expression} for {self.for_id} in {self.in_expression}]'
 
     def accept(self, visitor):
-        visitor.visit_ListComprehensionAssignment()
+        return visitor.visit_list_comprehension_assignment(self)
 
 
 class FunctionArgument(AstNode):
@@ -145,7 +145,7 @@ class FunctionArgument(AstNode):
         return f'FuncArg: ({self.type}-{self.name})'
 
     def accept(self, visitor):
-        visitor.visit_FunctionArgument()
+        return visitor.visit_function_argument(self)
 
 
 class FunctionInvocation(AstNode):
@@ -160,7 +160,7 @@ class FunctionInvocation(AstNode):
         return f'FuncInvoc: {self.name} ({arg_str})'
 
     def accept(self, visitor):
-        visitor.visit_FunctionInvocation()
+        return visitor.visit_function_invocation(self)
 
 
 class SingleCondition(AstNode):
@@ -176,7 +176,7 @@ class SingleCondition(AstNode):
         return f'SingleCond: ({self.left}{self.operator}{self.right})'
 
     def accept(self, visitor):
-        visitor.visit_SingleCondition()
+        return visitor.visit_single_condition(self)
 
 
 class ArithmeticExpression(AstNode):
@@ -189,7 +189,7 @@ class ArithmeticExpression(AstNode):
         return f'ArithmExpr: ({self.left_operand}{self.operator}{self.right_operand})'
 
     def accept(self, visitor):
-        visitor.visit_ArithmeticExpression()
+        return visitor.visit_arithmetic_expression(self)
 
 
 class ReturnExpression(AstNode):
@@ -203,4 +203,4 @@ class ReturnExpression(AstNode):
         return f'Return: {return_value};'
 
     def accept(self, visitor):
-        visitor.visit_ReturnExpression()
+        return visitor.visit_return_expression(self)
