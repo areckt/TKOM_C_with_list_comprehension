@@ -20,6 +20,9 @@ class FunctionDeclaration(AstNode):
 
         return f'FunDecl: {self.type} {self.name} ({args} {{{nested_ins}}})'
 
+    def accept(self, visitor):
+        visitor.visit_FunctionDeclaration()
+
 
 class IfStatement(AstNode):
     def __init__(self, condition, if_instructions, else_instructions):
@@ -38,6 +41,9 @@ class IfStatement(AstNode):
 
         return f'IfStmt: ({self.condition}) {{{nested_if_ins}}} Else: {{{nested_else_ins}}}'
 
+    def accept(self, visitor):
+        visitor.visit_IfStatement()
+
 
 class WhileStatement(AstNode):
     def __init__(self, condition, instructions):
@@ -50,3 +56,6 @@ class WhileStatement(AstNode):
             nested_ins = ''
 
         return f'WhileStmt: ({self.condition}) {{{nested_ins}}}'
+
+    def accept(self, visitor):
+        visitor.visit_WhileStatement()
