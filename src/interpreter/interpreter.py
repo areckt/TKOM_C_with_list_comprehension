@@ -1,7 +1,6 @@
-from ..lexer.lexer import Lexer
-from ..lexer.source import Source
-from ..parser.parser import Parser
-from .visitor import Visitor
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 class Interpreter:
@@ -11,7 +10,8 @@ class Interpreter:
 
     def run(self):
         program = self.parser.parse_program()
+        self.visitor.set_functions_def(program)
         for function in program:
             if function.name.name == 'main':
-                print(function)
+                logging.info(function)
                 function.accept(self.visitor)
