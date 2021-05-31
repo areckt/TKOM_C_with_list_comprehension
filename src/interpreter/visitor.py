@@ -90,6 +90,9 @@ class Visitor:
             else:
                 raise InvalidOperation('r-value', '=', 'r-value')
 
+    def set_functions_def(self, functions_def):
+        self.functions_def = functions_def
+
     # PRIMITIVES
     def visit_arithmetic_operator(self, node):
         pass
@@ -100,8 +103,9 @@ class Visitor:
     def visit_logical_operator(self, node):
         pass
 
-    def visit_id(self, node):
-        pass
+    @staticmethod
+    def visit_id(node):
+        return node.name
 
     def visit_type(self, node):
         pass
