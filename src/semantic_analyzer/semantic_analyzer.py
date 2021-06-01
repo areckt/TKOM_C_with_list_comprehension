@@ -5,6 +5,10 @@ from src.error_handling import *
 
 INT_TYPE = Type(Token(TokenType.INT_KEYWORD))
 FLOAT_TYPE = Type(Token(TokenType.FLOAT_KEYWORD))
+STRING_TYPE = Type(Token(TokenType.STRING_KEYWORD))
+LINT_TYPE = Type(Token(TokenType.INT_LIST_KEYWORD))
+LFLOAT_TYPE = Type(Token(TokenType.FLOAT_LIST_KEYWORD))
+LSTRING_TYPE = Type(Token(TokenType.STRING_LIST_KEYWORD))
 
 
 class SemanticAnalyzer:
@@ -57,12 +61,85 @@ class SemanticAnalyzer:
         new_var_symbol = VariableSymbol(var_decl.type, var_name)
         var_symbols[var_name] = new_var_symbol
 
+    def __check_list_var_declaration(self, list_var_decl, var_symbols, fun_symbols):
+        list_var_name = list_var_decl.name
+        if list_var_name in var_symbols:
+            SemanticVariableRedeclarationError(list_var_name).fatal()
+        list_var_type = list_var_decl.type
+
+        if list_var_type == LINT_TYPE:
+            list_elem_type = INT_TYPE
+        elif list_var_type == LFLOAT_TYPE:
+            list_elem_type = FLOAT_TYPE
+        else:
+            list_elem_type = STRING_TYPE
+
+        for value in list_var_decl.values:
+            self.__check_r_value(value, var_symbols, fun_symbols, list_elem_type)
+
+        new_var_symbol = VariableSymbol(list_var_decl.type, list_var_name)
+        var_symbols[list_var_name] = new_var_symbol
+
+    def __check_list_comprehension_declaration(self, list_cmprhnsn_decl, var_symbols, fun_symbols):
+        list_var_name = list_cmprhnsn_decl.name
+        if list_var_name in var_symbols:
+            SemanticVariableRedeclarationError(list_var_name).fatal()
+        list_var_type = list_cmprhnsn_decl.type
+        if list_var_type == LINT_TYPE:
+            list_elem_type = INT_TYPE
+        elif list_var_type == LFLOAT_TYPE:
+            list_elem_type = FLOAT_TYPE
+        else:
+            list_elem_type = STRING_TYPE
+
+        temp_for_id_symbol = VariableSymbol(list_elem_type, list_cmprhnsn_decl.for_id.name)
+        temp_var_symbols = var_symbols + [temp_for_id_symbol]
+        self.__check_r_value(list_cmprhnsn_decl.what_expression, temp_var_symbols, fun_symbols, list_elem_type)
+
+        self.__check_r_value(list_cmprhnsn_decl.in_expression, var_symbols, fun_symbols, list_cmprhnsn_decl.type)
+
     def __check_var_assignment(self, var_assignment, var_symbols, fun_symbols):
         var_name = var_assignment.name.name
         if var_name not in var_symbols:
             SemanticAssignmentWithoutDeclarationError(var_name).fatal()
         var_type = var_symbols[var_name].get_type()
         self.__check_r_value(var_assignment.value, var_symbols, fun_symbols, var_type)
+
+    def __check_list_var_assignment(self, list_var_assignment, var_symbols, fun_symbols):
+        list_var_name = list_var_assignment.name
+        if list_var_name not in var_symbols:
+            SemanticAssignmentWithoutDeclarationError(list_var_name).fatal()
+        list_var_type = var_symbols[list_var_name].get_type()
+
+        if list_var_type == LINT_TYPE:
+            list_elem_type = INT_TYPE
+        elif list_var_type == LFLOAT_TYPE:
+            list_elem_type = FLOAT_TYPE
+        else:
+            list_elem_type = STRING_TYPE
+
+        for value in list_var_assignment.values:
+            self.__check_r_value(value, var_symbols, fun_symbols, list_elem_type)
+
+    def __check_list_comprehension_assignment(self, list_cmprhnsn_assignment, var_symbols, fun_symbols):
+        list_var_name = list_cmprhnsn_assignment.name
+        if list_var_name not in var_symbols:
+            SemanticAssignmentWithoutDeclarationError(list_var_name).fatal()
+        list_var_type = var_symbols[list_var_name].get_type()
+
+        if list_var_type == LINT_TYPE:
+            list_elem_type = INT_TYPE
+        elif list_var_type == LFLOAT_TYPE:
+            list_elem_type = FLOAT_TYPE
+        else:
+            list_elem_type = STRING_TYPE
+
+        temp_for_id_symbol = VariableSymbol(list_elem_type, list_cmprhnsn_assignment.for_id.name)
+        temp_var_symbols = var_symbols + [temp_for_id_symbol]
+        self.__check_r_value(list_cmprhnsn_assignment.what_expression, temp_var_symbols, fun_symbols, list_elem_type)
+
+        self.__check_r_value(list_cmprhnsn_assignment.in_expression, var_symbols, fun_symbols,
+                             list_var_type)
 
     def __check_if_stmt(self, if_stmt, var_symbols, fun_symbols, is_inside_fun, return_type):
         condition = if_stmt.condition
@@ -165,10 +242,22 @@ class SemanticAnalyzer:
                 self.__check_fun_declaration(ins, var_symbols.copy(), fun_symbols)
 
             elif isinstance(ins, VariableDeclaration):
-                self.__check_var_declaration(ins, var_symbols.copy, fun_symbols)
+                self.__check_var_declaration(ins, var_symbols, fun_symbols)
+
+            elif isinstance(ins, ListVariableDeclaration):
+                self.__check_list_var_declaration(ins, var_symbols, fun_symbols)
+
+            elif isinstance(ins, ListComprehensionDeclaration):
+                self.__check_list_comprehension_declaration(ins, var_symbols, fun_symbols)
 
             elif isinstance(ins, VariableAssignment):
                 self.__check_var_assignment(ins, var_symbols, fun_symbols)
+
+            elif isinstance(ins, ListVariableAssignment):
+                self.__check_list_var_assignment(ins, var_symbols, fun_symbols)
+
+            elif isinstance(ins, ListComprehensionAssignment):
+                self.__check_list_comprehension_assignment(ins, var_symbols, fun_symbols)
 
             elif isinstance(ins, IfStatement):
                 self.__check_if_stmt(ins, var_symbols.copy(), fun_symbols.copy(), is_inside_fun, return_type)
