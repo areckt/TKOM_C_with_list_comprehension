@@ -75,14 +75,14 @@ class Parser:
         return FunctionDeclaration(type_token, id_token, arguments, instructions)
 
     def __parse_function_declaration_arguments(self):
-        possible_type_token = self.__check_if_one_of_tokens(ParserUtils.type_tokens)
+        possible_type_token = self.__check_if_one_of_tokens(ParserUtils.all_type_tokens)
         if not possible_type_token:
             return []
 
         id_token = self.__consume_token(TokenType.IDENTIFIER)
         arguments_so_far = [FunctionArgument(possible_type_token, id_token)]
         while self.__check_token(TokenType.COMMA):
-            type_token = self.__consume_one_of_tokens(ParserUtils.type_tokens, "type token")
+            type_token = self.__consume_one_of_tokens(ParserUtils.all_type_tokens, "type token")
             id_token = self.__consume_token(TokenType.IDENTIFIER)
             arguments_so_far.append(FunctionArgument(type_token, id_token))
 
@@ -149,7 +149,6 @@ class Parser:
             return None
 
         value = self.__parse_r_value()
-
         if value:
             self.__consume_token(TokenType.SEMICOLON)
             return VariableAssignment(id_token, value)
@@ -215,6 +214,9 @@ class Parser:
 
         if not additive_factor:
             additive_factor = self.__parse_unary_operation()
+
+        if not additive_factor:
+            additive_factor = self.__parse_id_starting()
 
         if not additive_factor and self.__check_token(TokenType.OPEN_BRACKET):
             additive_factor = self.__parse_arithmetic_expression()

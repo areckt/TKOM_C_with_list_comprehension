@@ -6,6 +6,8 @@ class ParserUtils:
 
     list_type_tokens = [TokenType.INT_LIST_KEYWORD, TokenType.FLOAT_LIST_KEYWORD, TokenType.STRING_LIST_KEYWORD]
 
+    all_type_tokens = type_tokens + list_type_tokens
+
     literal_tokens = [TokenType.INT_LITERAL, TokenType.FLOAT_LITERAL, TokenType.STRING_LITERAL]
 
     multiplicative_operator_tokens = [TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.MODULO]

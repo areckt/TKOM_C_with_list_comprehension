@@ -3,19 +3,22 @@ import sys
 from src.lexer.source import Source
 from src.lexer.lexer import Lexer
 from src.parser.parser import Parser
+from src.semantic_analyzer.semantic_analyzer import SemanticAnalyzer
 
 
 def init_all(input_file):
     file = open(input_file, "r")
     source = Source(file)
     lexer = Lexer(source)
+    semantic_analyzer = SemanticAnalyzer()
     # token = lexer.build_and_get_token()
     # while token.get_type() != TokenType.EOF_SYMBOL:
     #     # for now I just print found tokens on screen
     #     print(token)
     #     token = lexer.build_and_get_token()
     parser = Parser(lexer)
-    parser.parse_program()
+    program = parser.parse_program()
+    analyzed_program = semantic_analyzer.start_analysis(program)
 
 
 def main():

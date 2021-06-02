@@ -45,7 +45,7 @@ class SemanticVariableRedeclarationError(SemanticError):
 
 class SemanticInvalidTypeError(SemanticError):
     def __init__(self, expected_type, gotten_type):
-        self.message = f"invalid type, expected: {expected_type}, but got {gotten_type}"
+        self.message = f"invalid type, expected {expected_type}, but got {gotten_type}"
         super().__init__(self.message)
 
 
