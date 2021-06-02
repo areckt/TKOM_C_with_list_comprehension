@@ -212,11 +212,13 @@ class Parser:
     def __parse_additive_factor(self):
         additive_factor = self.__parse_id_or_literal()
 
-        if not additive_factor:
-            additive_factor = self.__parse_unary_operation()
+        if additive_factor and isinstance(additive_factor, Id):
+            possible_function_invoc = self.__parse_function_invocation_in_expression(additive_factor.name)
+            if possible_function_invoc:
+                additive_factor = possible_function_invoc
 
         if not additive_factor:
-            additive_factor = self.__parse_id_starting()
+            additive_factor = self.__parse_unary_operation()
 
         if not additive_factor and self.__check_token(TokenType.OPEN_BRACKET):
             additive_factor = self.__parse_arithmetic_expression()
@@ -246,6 +248,16 @@ class Parser:
                             f'expected literal or id, instead got {self.__get_current_token()}').fatal()
             return SingleCondition(possible_left_id_or_literal, possible_comparison_token, possible_right_id_or_literal)
         return possible_left_id_or_literal
+
+    def __parse_function_invocation_in_expression(self, id_token):
+        if not self.__check_token(TokenType.OPEN_BRACKET):
+            return None
+
+        arguments = self.__parse_function_invocation_arguments()
+        self.__consume_token(TokenType.CLOSE_BRACKET)
+
+        id_token = Token(TokenType.IDENTIFIER, id_token)
+        return FunctionInvocation(id_token, arguments)
 
     def __parse_function_invocation(self, id_token):
         if not self.__check_token(TokenType.OPEN_BRACKET):

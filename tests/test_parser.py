@@ -324,6 +324,13 @@ class ParserTest(unittest.TestCase):
         program = parser.parse_program()
         self.assert_instructions(program, list_of_expected)
 
+    def test_function_invocation_in_assignment(self):
+        input_str = """i = fun(10, temp, "Hey", 0.4);"""
+        list_of_expected = [VariableAssignment]
+        parser = init_parser_for_test(input_str)
+        program = parser.parse_program()
+        self.assert_instructions(program, list_of_expected)
+
     # RETURN
     def test_return_no_value(self):
         input_str = """return;"""
