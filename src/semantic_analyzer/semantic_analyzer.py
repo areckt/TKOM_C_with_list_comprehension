@@ -15,7 +15,7 @@ LSTRING_TYPE = Type(Token(TokenType.STRING_LIST_KEYWORD))
 
 class SemanticAnalyzer:
     def __init__(self):
-        pass
+        self.current_expected_type = None
 
     def start_analysis(self, program):
         return self.__analyze_scope(program, {}, {}, False, None)
@@ -58,6 +58,7 @@ class SemanticAnalyzer:
         var_name = var_decl.name.name
         if var_name in var_symbols:
             SemanticVariableRedeclarationError(var_name).fatal()
+        self.current_expected_type = var_decl.type
         self.__check_r_value(var_decl.value, var_symbols, fun_symbols, var_decl.type)
 
         new_var_symbol = VariableSymbol(var_decl.type, var_name)
@@ -76,13 +77,12 @@ class SemanticAnalyzer:
         else:
             list_elem_type = STRING_TYPE
 
+        self.current_expected_type = list_elem_type
         for value in list_var_decl.values:
             self.__check_r_value(value, var_symbols, fun_symbols, list_elem_type)
 
         new_var_symbol = VariableSymbol(list_var_decl.type, list_var_name)
         var_symbols[list_var_name] = new_var_symbol
-        print("PO LIST VAR DECL")
-        print(var_symbols)
 
     def __check_list_comprehension_declaration(self, list_cmprhnsn_decl, var_symbols, fun_symbols):
         list_var_name = list_cmprhnsn_decl.name.name
@@ -96,6 +96,7 @@ class SemanticAnalyzer:
         else:
             list_elem_type = STRING_TYPE
 
+        self.current_expected_type = list_elem_type
         temp_for_id_symbol = VariableSymbol(list_elem_type, list_cmprhnsn_decl.for_id.name)
         temp_var_symbols = copy.deepcopy(var_symbols)
         temp_var_symbols[list_cmprhnsn_decl.for_id.name] = temp_for_id_symbol
@@ -110,14 +111,11 @@ class SemanticAnalyzer:
         if var_name not in var_symbols:
             SemanticAssignmentWithoutDeclarationError(var_name).fatal()
         var_type = var_symbols[var_name].get_type()
+        self.current_expected_type = var_type
         self.__check_r_value(var_assignment.value, var_symbols, fun_symbols, var_type)
 
     def __check_list_var_assignment(self, list_var_assignment, var_symbols, fun_symbols):
         list_var_name = list_var_assignment.name.name
-        print("list_var_name")
-        print(list_var_name)
-        print("var_symbols")
-        print(var_symbols)
         if list_var_name not in var_symbols:
             SemanticAssignmentWithoutDeclarationError(list_var_name).fatal()
         list_var_type = var_symbols[list_var_name].get_type()
@@ -129,6 +127,7 @@ class SemanticAnalyzer:
         else:
             list_elem_type = STRING_TYPE
 
+        self.current_expected_type = list_elem_type
         for value in list_var_assignment.values:
             self.__check_r_value(value, var_symbols, fun_symbols, list_elem_type)
 
@@ -138,15 +137,17 @@ class SemanticAnalyzer:
             SemanticAssignmentWithoutDeclarationError(list_var_name).fatal()
         list_var_type = var_symbols[list_var_name].get_type()
 
-        if list_var_type == LINT_TYPE:
+        if str(list_var_type) == str(LINT_TYPE):
             list_elem_type = INT_TYPE
-        elif list_var_type == LFLOAT_TYPE:
+        elif str(list_var_type) == str(LFLOAT_TYPE):
             list_elem_type = FLOAT_TYPE
         else:
             list_elem_type = STRING_TYPE
 
+        self.current_expected_type = list_elem_type
         temp_for_id_symbol = VariableSymbol(list_elem_type, list_cmprhnsn_assignment.for_id.name)
-        temp_var_symbols = var_symbols + [temp_for_id_symbol]
+        temp_var_symbols = copy.deepcopy(var_symbols)
+        temp_var_symbols[list_cmprhnsn_assignment.for_id.name] = temp_for_id_symbol
         self.__check_r_value(list_cmprhnsn_assignment.what_expression, temp_var_symbols, fun_symbols, list_elem_type)
 
         self.__check_r_value(list_cmprhnsn_assignment.in_expression, var_symbols, fun_symbols,
@@ -169,14 +170,14 @@ class SemanticAnalyzer:
     def __check_return_expr(self, return_expr, var_symbols, fun_symbols, is_inside_fun, return_type):
         if not is_inside_fun:
             SemanticReturnNotInsideFunctionBodyError().fatal()
-
+        self.current_expected_type = return_type
         self.__check_r_value(return_expr.value, var_symbols, fun_symbols, return_type)
 
     def __check_arithmetic_expr(self, arithmetic_expr, var_symbols, fun_symbols):
         left = arithmetic_expr.left_operand
         right = arithmetic_expr.right_operand
-        self.__check_r_value(left, var_symbols, fun_symbols, INT_TYPE)
-        self.__check_r_value(right, var_symbols, fun_symbols, INT_TYPE)
+        self.__check_r_value(left, var_symbols, fun_symbols, self.current_expected_type)
+        self.__check_r_value(right, var_symbols, fun_symbols, self.current_expected_type)
 
     def __check_fun_invocation(self, fun_invocation, var_symbols, fun_symbols):
         fun_name = fun_invocation.name.name
@@ -215,8 +216,8 @@ class SemanticAnalyzer:
             self.__check_comparison(condition, var_symbols)
 
     def __check_comparison(self, comparison, var_symbols):
-        self.__check_r_value(comparison.left, var_symbols, fun_symbols=None, expected_type=INT_TYPE)
-        self.__check_r_value(comparison.right, var_symbols, fun_symbols=None, expected_type=INT_TYPE)
+        self.__check_r_value(comparison.left, var_symbols, fun_symbols=None, expected_type=None)
+        self.__check_r_value(comparison.right, var_symbols, fun_symbols=None, expected_type=None)
 
     def __check_r_value(self, r_value, var_symbols, fun_symbols, expected_type):
         if isinstance(r_value, Literal):
@@ -224,10 +225,7 @@ class SemanticAnalyzer:
         elif isinstance(r_value, Id):
             self.__check_var_id(r_value, var_symbols, expected_type)
         elif isinstance(r_value, ArithmeticExpression):
-            if str(expected_type) == str(INT_TYPE) or str(expected_type) == str(FLOAT_TYPE):
-                self.__check_arithmetic_expr(r_value, var_symbols, fun_symbols)
-            else:
-                SemanticNotNumberInArithmeticExprError(expected_type).fatal()
+            self.__check_arithmetic_expr(r_value, var_symbols, fun_symbols)
 
     @staticmethod
     def __get_type_of_r_value(r_value, var_symbols):
