@@ -3,18 +3,18 @@ class DivisionError(Exception):
         super().__init__()
 
 
-class InvalidSyntax(Exception):
-    def __init__(self, position=(0, 0), expected_type=None, given_type=None, given_value=None):
-        self.position = position
-        self.expected_type = expected_type
-        self.given_type = given_type
-        self.given_value = given_value
+# class InvalidSyntax(Exception):
+#     def __init__(self, position=(0, 0), expected_type=None, given_type=None, given_value=None):
+#         self.position = position
+#         self.expected_type = expected_type
+#         self.given_type = given_type
+#         self.given_value = given_value
 
 
-class InvalidValue(Exception):
-    def __init__(self, expected_type, given_type):
-        self.expected_type = expected_type
-        self.given_type = given_type
+# class InvalidValue(Exception):
+#     def __init__(self, expected_type, given_type):
+#         self.expected_type = expected_type
+#         self.given_type = given_type
 
 
 class UndefinedOperation(Exception):
@@ -31,10 +31,10 @@ class InvalidOperation(Exception):
         self.right_operand = right_operand
 
 
-class Undeclared(Exception):
-    def __init__(self, subject, name):
-        self.subject = subject
-        self.name = name
+# class Undeclared(Exception):
+#     def __init__(self, subject, name):
+#         self.subject = subject
+#         self.name = name
 
 
 class IndexOutOfRange(Exception):
