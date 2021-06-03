@@ -9,8 +9,7 @@ import operator
 
 
 class Visitor:
-    def __init__(self, list_of_instructions):
-        self.list_of_instructions = list_of_instructions
+    def __init__(self):
         self.var_symbols = {}
         self.fun_symbols = {}
 
@@ -19,7 +18,7 @@ class Visitor:
     # ########### #
 
     def get_variable_value(self, variable_name):
-        return self.var_symbols[variable_name].get_value
+        return self.var_symbols[variable_name].get_value()
 
     def set_variable_value(self, variable_name, new_value):
         self.var_symbols[variable_name].set_value(new_value)
@@ -77,27 +76,32 @@ class Visitor:
     #  P R I M I T I V E S  #
     # ##################### #
 
-    def visit_arithmetic_operator(self, node):
+    @staticmethod
+    def visit_arithmetic_operator(node):
         return str(node.type)
 
-    def visit_comparison_operator(self, node):
+    @staticmethod
+    def visit_comparison_operator(node):
         return str(node.type)
 
-    def visit_logical_operator(self, node):
+    @staticmethod
+    def visit_logical_operator(node):
         return str(node.type)
 
     @staticmethod
     def visit_id(node):
         return node.name
 
-    def visit_type(self, node):
+    @staticmethod
+    def visit_type(node):
         return str(node.type)
 
     # ######################## #
     #  S E M I - C O M P L E X #
     # ######################## #
 
-    def visit_literal(self, node):
+    @staticmethod
+    def visit_literal(node):
         return node.get_value()
 
     def visit_unary_operation(self, node):
@@ -152,7 +156,8 @@ class Visitor:
     def visit_list_comprehension_assignment(self, node):
         pass
 
-    def visit_function_argument(self, node):
+    @staticmethod
+    def visit_function_argument(node):
         return node.name.name
 
     def visit_function_invocation(self, node):
@@ -162,27 +167,11 @@ class Visitor:
         pass
 
     def visit_arithmetic_expression(self, node):
-        left_operand = node.left_operand.accept(self)
-        operation = node.operator.accept(self)
-        right_operand = node.right_operand.accept(self)
-
-        assign_value = self.try_variable_assign(operation, left_operand, right_operand)
-        if assign_value is not None:
-            return assign_value
-
-        if isinstance(left_operand, str):
-            left_operand = self.get_variable_value(left_operand)
-        if isinstance(right_operand, str):
-            right_operand = self.get_variable_value(right_operand)
-
-        return_value = self.calculate_numeric_expression(left_operand, right_operand, operation)
-        if return_value is None:
-            raise UndefinedOperation(type(left_operand).__name__, operation. type(right_operand).__name__)
-        return return_value
+        pass
 
     def visit_return_expression(self, node):
         return_value = self.evaluate_node_value(node.value)
-        print(return_value)
+        print("RETURN: " + str(return_value))
         return return_value
 
     # COMPLEX

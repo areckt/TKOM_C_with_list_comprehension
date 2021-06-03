@@ -4,6 +4,8 @@ from src.lexer.source import Source
 from src.lexer.lexer import Lexer
 from src.parser.parser import Parser
 from src.semantic_analyzer.semantic_analyzer import SemanticAnalyzer
+from src.interpreter.visitor import Visitor
+from src.interpreter.interpreter import Interpreter
 
 
 def init_all(input_file):
@@ -11,6 +13,7 @@ def init_all(input_file):
     source = Source(file)
     lexer = Lexer(source)
     semantic_analyzer = SemanticAnalyzer()
+    visitor = Visitor()
     # token = lexer.build_and_get_token()
     # while token.get_type() != TokenType.EOF_SYMBOL:
     #     # for now I just print found tokens on screen
@@ -19,6 +22,8 @@ def init_all(input_file):
     parser = Parser(lexer)
     program = parser.parse_program()
     analyzed_program = semantic_analyzer.start_analysis(program)
+    interpreter = Interpreter(analyzed_program, visitor)
+    interpreter.run()
 
 
 def main():
