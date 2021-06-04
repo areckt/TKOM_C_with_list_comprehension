@@ -1,12 +1,9 @@
-from src.parser.ast.primitives import *
+import copy
+
 from src.parser.ast.semi_complex import *
 from src.parser.ast.complex import *
-from src.lexer.source import *
-from src.lexer.token import *
 from .exceptions import *
 from src.interpreter.visitor_utils import *
-import operator
-import copy
 
 
 class Visitor:
