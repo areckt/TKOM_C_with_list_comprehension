@@ -38,7 +38,7 @@ class SemanticAnalyzer:
         fun_symbols[fun_name] = new_fun_symbol
         self.__analyze_scope(body, var_symbols, fun_symbols, is_inside_fun=True, return_type=return_type)
         if not self.__check_if_return_in_fun_body(body, fun_name):
-            SemanticNoReturnExpressionInFunBodyError(fun_name).warning()
+            SemanticNoReturnExpressionInFunBodyError(fun_name).fatal()
 
     def __check_if_return_in_fun_body(self, list_of_instruction, fun_name):
         for ins in list_of_instruction:
