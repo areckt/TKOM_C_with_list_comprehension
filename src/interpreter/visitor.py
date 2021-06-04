@@ -78,7 +78,14 @@ class Visitor:
 
     @staticmethod
     def visit_arithmetic_operator(node):
-        return str(node.type)
+        if node.type == ArithmeticOperatorTypes.PLUS:
+            return "+"
+        elif node.type == ArithmeticOperatorTypes.MINUS:
+            return "-"
+        elif node.type == ArithmeticOperatorTypes.MULTIPLY:
+            return "*"
+        elif node.type == ArithmeticOperatorTypes.DIVIDE:
+            return "/"
 
     @staticmethod
     def visit_comparison_operator(node):
@@ -167,7 +174,30 @@ class Visitor:
         pass
 
     def visit_arithmetic_expression(self, node):
-        pass
+        left_operand = node.left_operand
+        left_operand = self.evaluate_node_value(left_operand)
+
+        right_operand = node.right_operand
+        right_operand = self.evaluate_node_value(right_operand)
+
+        operator_symbol = node.operator
+        operator_symbol = self.visit_arithmetic_operator(operator_symbol)
+
+        result = None
+
+        if operator_symbol == "+":
+            result = left_operand + right_operand
+        elif operator_symbol == "-":
+            result = left_operand - right_operand
+        elif operator_symbol == "*":
+            result = left_operand * right_operand
+        elif operator_symbol == "/":
+            if right_operand == 0:
+                raise DivisionError()
+            else:
+                result = left_operand / right_operand
+
+        return result
 
     def visit_return_expression(self, node):
         return_value = self.evaluate_node_value(node.value)
