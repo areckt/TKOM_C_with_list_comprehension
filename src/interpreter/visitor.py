@@ -1,5 +1,3 @@
-import copy
-
 from src.parser.ast.primitives import *
 from src.parser.ast.semi_complex import *
 from src.parser.ast.complex import *
@@ -8,6 +6,7 @@ from src.lexer.token import *
 from .exceptions import *
 from src.interpreter.visitor_utils import *
 import operator
+import copy
 
 
 class Visitor:
@@ -22,9 +21,6 @@ class Visitor:
 
     def get_variable_value(self, variable_name):
         return self.var_symbols[variable_name].get_value()
-
-    def set_variable_value(self, variable_name, new_value):
-        self.var_symbols[variable_name].set_value(new_value)
 
     def find_function_def(self, identifier, arguments_num):
         for function_def in self.fun_symbols:
@@ -46,21 +42,41 @@ class Visitor:
         elif isinstance(node, UnaryOperation):
             return self.visit_unary_operation(node)
 
-    # def does_element_meet_conditions(self, element, conditions):
-    #     operators = {
-    #         '>': operator.gt,
-    #         '<': operator.lt,
-    #         '>=': operator.ge,
-    #         '<=': operator.le,
-    #         '==': operator.eq,
-    #         '!=': operator.ne
-    #     }
-    #     for condition in conditions:
-    #         operation, expression = condition.accept(self)
-    #         operation = operators[operation]
-    #         if not (operation(element, expression)):
-    #             return False
-    #     return True
+    def quick_var_assignment_or_declaration(self, node):
+        var_name = node.name.name
+        new_value = self.evaluate_node_value(node.value)
+        self.save_variable(var_name, new_value)
+
+    def quick_list_var_assignment_or_declaration(self, node):
+        var_name = node.name.name
+        var_values = node.values
+        final_values = []
+        for value in var_values:
+            final_values.append(self.evaluate_node_value(value))
+        self.save_variable(var_name, final_values)
+
+    def quick_list_comprehension_assignment_or_declaration(self, node):
+        var_name = node.name.name
+
+        in_expression = node.in_expression
+        in_expression = self.evaluate_node_value(in_expression)
+
+        for_id = node.for_id.name
+
+        target_values = []
+        target_len = len(in_expression)
+
+        var_symbols_copy = copy.deepcopy(self.var_symbols)
+
+        for i in range(target_len):
+            self.save_variable(for_id, in_expression[i])
+
+            what_expression = node.what_expression
+            what_expression = self.evaluate_node_value(what_expression)
+            target_values.append(what_expression)
+
+        self.var_symbols = var_symbols_copy
+        self.save_variable(var_name, target_values)
 
     # ##################### #
     #  P R I M I T I V E S  #
@@ -156,40 +172,22 @@ class Visitor:
             raise IndexOutOfRange()
 
     def visit_variable_declaration(self, node):
-        var_name = node.name.name
-        var_value = node.value
-
-        var_value = self.evaluate_node_value(var_value)
-
-        self.save_variable(var_name, var_value)
+        self.quick_var_assignment_or_declaration(node)
 
     def visit_list_variable_declaration(self, node):
-        var_name = node.name.name
-        var_values = node.values
-        final_values = []
-        for value in var_values:
-            final_values.append(self.evaluate_node_value(value))
-
-        self.save_variable(var_name, final_values)
+        self.quick_list_var_assignment_or_declaration(node)
 
     def visit_list_comprehension_declaration(self, node):
-        pass
+        self.quick_list_comprehension_assignment_or_declaration(node)
 
     def visit_variable_assignment(self, node):
-        var_name = node.name.name
-        new_value = self.evaluate_node_value(node.value)
-        self.set_variable_value(var_name, new_value)
+        self.quick_var_assignment_or_declaration(node)
 
     def visit_list_variable_assignment(self, node):
-        var_name = node.name.name
-        new_values = node.values
-        target_values = []
-        for new_value in new_values:
-            target_values.append(self.evaluate_node_value(new_value))
-        self.set_variable_value(var_name, target_values)
+        self.quick_list_var_assignment_or_declaration(node)
 
     def visit_list_comprehension_assignment(self, node):
-        pass
+        self.quick_list_comprehension_assignment_or_declaration(node)
 
     @staticmethod
     def visit_function_argument(node):
