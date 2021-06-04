@@ -14,6 +14,7 @@ class Visitor:
     def __init__(self):
         self.var_symbols = {}
         self.fun_symbols = {}
+        self.was_return = False
 
     # ########### #
     #  U T I L S  #
@@ -253,6 +254,7 @@ class Visitor:
     def visit_return_expression(self, node):
         return_value = self.evaluate_node_value(node.value)
         print("RETURN: " + str(return_value))
+        self.was_return = True
         return return_value
 
     # ############### #
@@ -261,7 +263,8 @@ class Visitor:
 
     def visit_function_declaration(self, node):
         for instruction in node.instructions:
-            instruction.accept(self)
+            if not self.was_return:
+                instruction.accept(self)
 
     def visit_if_statement(self, node):
         condition = node.condition
@@ -272,11 +275,13 @@ class Visitor:
 
         if condition:
             for instruction in if_instructions:
-                instruction.accept(self)
+                if not self.was_return:
+                    instruction.accept(self)
         else:
             if else_instructions != '':
                 for instruction in else_instructions:
-                    instruction.accept(self)
+                    if not self.was_return:
+                        instruction.accept(self)
 
     def visit_while_statement(self, node):
         condition = node.condition
@@ -287,5 +292,6 @@ class Visitor:
         if condition:
             while condition:
                 for instruction in instructions:
-                    instruction.accept(self)
+                    if not self.was_return:
+                        instruction.accept(self)
                 condition = self.visit_single_condition(node.condition)
