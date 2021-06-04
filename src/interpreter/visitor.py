@@ -1,3 +1,5 @@
+import copy
+
 from src.parser.ast.primitives import *
 from src.parser.ast.semi_complex import *
 from src.parser.ast.complex import *
@@ -38,6 +40,10 @@ class Visitor:
             return self.get_variable_value(node.name)
         elif isinstance(node, ArithmeticExpression):
             return self.visit_arithmetic_expression(node)
+        elif isinstance(node, ListElement):
+            return self.visit_list_element(node)
+        elif isinstance(node, UnaryOperation):
+            return self.visit_unary_operation(node)
 
     # def does_element_meet_conditions(self, element, conditions):
     #     operators = {
@@ -55,23 +61,6 @@ class Visitor:
     #             return False
     #     return True
 
-    @staticmethod
-    def calculate_numeric_expression(left_operand, right_operand, operation):
-        if (isinstance(left_operand, int) and isinstance(right_operand, int)) or \
-                (isinstance(left_operand, float) and isinstance(right_operand, float)):
-            if operation == '+':
-                return left_operand + right_operand
-            elif operation == '-':
-                return left_operand - right_operand
-            elif operation == '*':
-                return left_operand * right_operand
-            elif operation == '/':
-                if right_operand == 0:
-                    raise DivisionError()
-                return left_operand / right_operand
-            else:
-                raise UndefinedOperation(type(left_operand).__name__, operation, type(right_operand).__name__)
-
     # ##################### #
     #  P R I M I T I V E S  #
     # ##################### #
@@ -86,14 +75,36 @@ class Visitor:
             return "*"
         elif node.type == ArithmeticOperatorTypes.DIVIDE:
             return "/"
+        elif node.type == ArithmeticOperatorTypes.MODULO:
+            return "%"
+        elif node.type == ArithmeticOperatorTypes.LENGTH_OP:
+            return "_"
+        elif node.type == ArithmeticOperatorTypes.NOT:
+            return "!"
 
     @staticmethod
     def visit_comparison_operator(node):
-        return str(node.type)
+        if node.type == ComparisonOperatorTypes.LESS:
+            return "<"
+        elif node.type == ComparisonOperatorTypes.LESS_OR_EQUAL:
+            return "<="
+        elif node.type == ComparisonOperatorTypes.EQUAL:
+            return "=="
+        elif node.type == ComparisonOperatorTypes.NOT_EQUAL:
+            return "!="
+        elif node.type == ComparisonOperatorTypes.GREATER:
+            return ">"
+        elif node.type == ComparisonOperatorTypes.GREATER_OR_EQUAL:
+            return ">="
 
     @staticmethod
     def visit_logical_operator(node):
-        return str(node.type)
+        if node.type == LogicalOperatorTypes.NOT:
+            return "!"
+        elif node.type == LogicalOperatorTypes.OR:
+            return "||"
+        elif node.type == LogicalOperatorTypes.AND:
+            return "&&"
 
     @staticmethod
     def visit_id(node):
@@ -112,11 +123,27 @@ class Visitor:
         return node.get_value()
 
     def visit_unary_operation(self, node):
-        pass
+        unary_operator = node.unary_operator
+        unary_operator = self.visit_arithmetic_operator(unary_operator)
+
+        expression = node.expression
+        expression = self.evaluate_node_value(expression)
+
+        result = None
+
+        if unary_operator == "-":
+            result = expression * (-1)
+        elif unary_operator == "!":
+            result = expression
+            result.reverse()
+        elif unary_operator == "_":
+            result = len(expression)
+
+        return result
 
     def visit_list_element(self, node):
         list_name = node.name.name
-        list_value = self.var_symbols[list_name].get_value
+        list_value = self.var_symbols[list_name].get_value()
         list_length = len(list_value)
         index = node.index
 
