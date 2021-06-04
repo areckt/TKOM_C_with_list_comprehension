@@ -114,9 +114,9 @@ class Visitor:
     def visit_type(node):
         return str(node.type)
 
-    # ######################## #
-    #  S E M I - C O M P L E X #
-    # ######################## #
+    # ######################### #
+    #  S E M I - C O M P L E X  #
+    # ######################### #
 
     @staticmethod
     def visit_literal(node):
@@ -198,7 +198,31 @@ class Visitor:
         pass
 
     def visit_single_condition(self, node):
-        pass
+        left = node.left
+        left = self.evaluate_node_value(left)
+
+        right = node.right
+        right = self.evaluate_node_value(right)
+
+        comparison_operator = node.operator
+        comparison_operator = self.visit_comparison_operator(comparison_operator)
+
+        result = None
+
+        if comparison_operator == "<":
+            result = left < right
+        elif comparison_operator == "<=":
+            result = left <= right
+        elif comparison_operator == "==":
+            result = left == right
+        elif comparison_operator == "!=":
+            result = left != right
+        elif comparison_operator == ">":
+            result = left > right
+        elif comparison_operator == ">=":
+            result = left >= right
+
+        return result
 
     def visit_arithmetic_expression(self, node):
         left_operand = node.left_operand
@@ -231,13 +255,28 @@ class Visitor:
         print("RETURN: " + str(return_value))
         return return_value
 
-    # COMPLEX
+    # ############### #
+    #  C O M P L E X  #
+    # ############### #
+
     def visit_function_declaration(self, node):
         for instruction in node.instructions:
             instruction.accept(self)
 
     def visit_if_statement(self, node):
-        pass
+        condition = node.condition
+        condition = self.visit_single_condition(condition)
+
+        if_instructions = node.if_instructions
+        else_instructions = node.else_instructions
+
+        if condition:
+            for instruction in if_instructions:
+                instruction.accept(self)
+        else:
+            if else_instructions != '':
+                for instruction in else_instructions:
+                    instruction.accept(self)
 
     def visit_while_statement(self, node):
         pass
