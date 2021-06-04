@@ -279,4 +279,13 @@ class Visitor:
                     instruction.accept(self)
 
     def visit_while_statement(self, node):
-        pass
+        condition = node.condition
+        condition = self.visit_single_condition(condition)
+
+        instructions = node.instructions
+
+        if condition:
+            while condition:
+                for instruction in instructions:
+                    instruction.accept(self)
+                condition = self.visit_single_condition(node.condition)
