@@ -236,18 +236,18 @@ class Parser:
         return UnaryOperation(ArithmeticOperator(possible_unary_operator), expression)
 
     def __parse_condition(self):
-        possible_left_id_or_literal = self.__parse_id_or_literal()
-        if not possible_left_id_or_literal:
+        possible_left_expression = self.__parse_arithmetic_expression()
+        if not possible_left_expression:
             return None
 
         possible_comparison_token = self.__check_if_one_of_tokens(ParserUtils.comparison_tokens)
         if possible_comparison_token:
-            possible_right_id_or_literal = self.__parse_id_or_literal()
-            if not possible_right_id_or_literal:
+            possible_right_expression = self.__parse_arithmetic_expression()
+            if not possible_right_expression:
                 ParserError(self.__get_position(),
-                            f'expected literal or id, instead got {self.__get_current_token()}').fatal()
-            return SingleCondition(possible_left_id_or_literal, possible_comparison_token, possible_right_id_or_literal)
-        return possible_left_id_or_literal
+                            f'expected literal, id or expression, instead got {self.__get_current_token()}').fatal()
+            return SingleCondition(possible_left_expression, possible_comparison_token, possible_right_expression)
+        return possible_left_expression
 
     def __parse_function_invocation_in_expression(self, id_token):
         if not self.__check_token(TokenType.OPEN_BRACKET):
