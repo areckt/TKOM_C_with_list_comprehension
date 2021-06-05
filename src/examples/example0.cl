@@ -1,4 +1,8 @@
 int main() {
+
+    # PONIZSZY KOD NIE ROBI NIC SZCZEGÓLNEGO
+    # TEN PRZYKLAD MA TYLKO POKAZAC SKLADNIE JEZYKA
+
     int a = 5;                              # int declaration
     a = 3*(a + 2 * (1 - a));                # int assignment
 
@@ -15,7 +19,7 @@ int main() {
     e = [-2 * num for num in e];            # lint list comprehension assignment
 
     lfloat f = [1.1, -4.2, 2.4];            # lfloat declaration
-    f = [f[a-4], 0.4, 5.5];                 # lfloat assignment
+    f = [f[a+10], 0.4, 5.5];                # lfloat assignment
 
     lfloat g = [b * fnum for fnum in f];    # lfloat list comprehension declaration
     g = [9.9 * fnum for fnum in g];         # lfloat list comprehension assignment
@@ -37,12 +41,5 @@ int main() {
         a = a - 1;
     }
 
-    lfloat foo(float x, float y, float z){  # function declaration inside main with 3 arguments
-        lfloat result = [x, y, z];          # use of arguments to declare new variable
-        return result;                      # return variable with matching type (lfloat foo => return lfloat)
-    }
-
-    int len = _foo(4.4, b * 5.5, 6.6);      # length of foo() result assigned to int
-
-    return len;                             # return variable with matching type (int main => return int)
+    return a;                               # return variable with matching type (int main => return int)
 }

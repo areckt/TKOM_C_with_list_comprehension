@@ -1,5 +1,5 @@
 int main(){
-    int n = 10;
+    int n = 8;
     if (n <= 2){
         return 1;
     }
