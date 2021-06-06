@@ -213,9 +213,9 @@ class Parser:
         additive_factor = self.__parse_id_or_literal()
 
         if additive_factor and isinstance(additive_factor, Id):
-            possible_function_invoc = self.__parse_function_invocation_in_expression(additive_factor.name)
-            if possible_function_invoc:
-                additive_factor = possible_function_invoc
+            possible_function_invocation = self.__parse_function_invocation_in_expression(additive_factor.name)
+            if possible_function_invocation:
+                additive_factor = possible_function_invocation
 
         if not additive_factor:
             additive_factor = self.__parse_unary_operation()

@@ -9,20 +9,32 @@ from src.interpreter.interpreter import Interpreter
 
 
 def init_all(input_file):
+    # open the file
     file = open(input_file, "r")
+
+    # init Source
     source = Source(file)
+
+    # init Lexer
     lexer = Lexer(source)
-    semantic_analyzer = SemanticAnalyzer()
-    visitor = Visitor()
-    # token = lexer.build_and_get_token()
-    # while token.get_type() != TokenType.EOF_SYMBOL:
-    #     # for now I just print found tokens on screen
-    #     print(token)
-    #     token = lexer.build_and_get_token()
+
+    # init Parser
     parser = Parser(lexer)
+
+    # build AST nodes
     program = parser.parse_program()
+
+    # init Semantic Analyzer
+    semantic_analyzer = SemanticAnalyzer()
+
+    # analyze the built AST nodes
     analyzed_program = semantic_analyzer.start_analysis(program)
+
+    # init Visitor and Interpreter
+    visitor = Visitor()
     interpreter = Interpreter(analyzed_program, visitor)
+
+    # run interpreter
     interpreter.run()
 
 

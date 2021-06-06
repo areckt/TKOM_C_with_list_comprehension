@@ -1,5 +1,5 @@
 from enum import Enum, auto, unique
-from src.lexer.token import TokenType, Token
+from src.lexer.token import TokenType
 
 
 @unique

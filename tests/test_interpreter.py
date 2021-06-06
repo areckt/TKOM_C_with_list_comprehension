@@ -34,9 +34,9 @@ class InterpreterTest(unittest.TestCase):
 
         expected_result = "21"
 
-        with patch('sys.stdout', new=io.StringIO()) as fake_out:
+        with patch('sys.stdout', new=io.StringIO()) as temp_out:
             init_interpreter_for_test(input_str)
-            self.assertEqual(fake_out.getvalue(), "RETURN: " + expected_result + "\n")
+            self.assertEqual(temp_out.getvalue(), "RETURN: " + expected_result + "\n")
 
     def test_example_2(self):
         input_str = """
@@ -53,9 +53,9 @@ class InterpreterTest(unittest.TestCase):
 
         expected_result = "[64, 49, 36, 25, 16, 9, 4, 1]"
 
-        with patch('sys.stdout', new=io.StringIO()) as fake_out:
+        with patch('sys.stdout', new=io.StringIO()) as temp_out:
             init_interpreter_for_test(input_str)
-            self.assertEqual(fake_out.getvalue(), "RETURN: " + expected_result + "\n")
+            self.assertEqual(temp_out.getvalue(), "RETURN: " + expected_result + "\n")
 
     def test_example_3(self):
         input_str = """
@@ -71,9 +71,9 @@ class InterpreterTest(unittest.TestCase):
 
         expected_result = "4"
 
-        with patch('sys.stdout', new=io.StringIO()) as fake_out:
+        with patch('sys.stdout', new=io.StringIO()) as temp_out:
             init_interpreter_for_test(input_str)
-            self.assertEqual(fake_out.getvalue(), "RETURN: " + expected_result + "\n")
+            self.assertEqual(temp_out.getvalue(), "RETURN: " + expected_result + "\n")
 
 
 if __name__ == '__main__':

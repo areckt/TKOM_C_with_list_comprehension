@@ -1,6 +1,10 @@
 from src.error_handling import LexerError
 from src.lexer.token import TokenType, Token, TokenDicts
 
+# consts
+WHITES = [' ', '\t', '\n']
+COMMENT = '#'
+
 
 class Lexer:
     def __init__(self, source):
@@ -16,10 +20,6 @@ class Lexer:
 
     def __ignore_whites_and_comments(self):
         curr_char = self.__get_char()
-
-        # consts
-        WHITES = [' ', '\t', '\n']
-        COMMENT = '#'
 
         # flags
         is_comment, is_white = False, False

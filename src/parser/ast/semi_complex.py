@@ -1,5 +1,6 @@
 # semi_complex - they consist of primitives and other semi_complex but do not introduce new scope
 from src.parser.ast.primitives import *
+from src.lexer.token import TokenType, Token
 
 
 class Literal(AstNode):
