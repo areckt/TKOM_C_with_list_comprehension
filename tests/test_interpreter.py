@@ -75,6 +75,28 @@ class InterpreterTest(unittest.TestCase):
             init_interpreter_for_test(input_str)
             self.assertEqual(temp_out.getvalue(), "RETURN: " + expected_result + "\n")
 
+    def test_list_element_out_of_range(self):
+        input_str = """
+
+        int main(){
+            lint nums = [1, 2, 3, 4, 5];
+            return nums[5];
+        }"""
+
+        with self.assertRaises(Exception):
+            init_interpreter_for_test(input_str)
+
+    def test_divide_by_zero(self):
+        input_str = """
+
+        int main(){
+            int a = 5 / 0;
+            return a;
+        }"""
+
+        with self.assertRaises(Exception):
+            init_interpreter_for_test(input_str)
+
 
 if __name__ == '__main__':
     unittest.main()
