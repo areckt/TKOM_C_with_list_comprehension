@@ -75,14 +75,14 @@ class Parser:
         return FunctionDeclaration(type_token, id_token, arguments, instructions)
 
     def __parse_function_declaration_arguments(self):
-        possible_type_token = self.__check_if_one_of_tokens(ParserUtils.type_tokens)
+        possible_type_token = self.__check_if_one_of_tokens(ParserUtils.all_type_tokens)
         if not possible_type_token:
             return []
 
         id_token = self.__consume_token(TokenType.IDENTIFIER)
         arguments_so_far = [FunctionArgument(possible_type_token, id_token)]
         while self.__check_token(TokenType.COMMA):
-            type_token = self.__consume_one_of_tokens(ParserUtils.type_tokens, "type token")
+            type_token = self.__consume_one_of_tokens(ParserUtils.all_type_tokens, "type token")
             id_token = self.__consume_token(TokenType.IDENTIFIER)
             arguments_so_far.append(FunctionArgument(type_token, id_token))
 
@@ -149,7 +149,6 @@ class Parser:
             return None
 
         value = self.__parse_r_value()
-
         if value:
             self.__consume_token(TokenType.SEMICOLON)
             return VariableAssignment(id_token, value)
@@ -213,6 +212,11 @@ class Parser:
     def __parse_additive_factor(self):
         additive_factor = self.__parse_id_or_literal()
 
+        if additive_factor and isinstance(additive_factor, Id):
+            possible_function_invocation = self.__parse_function_invocation_in_expression(additive_factor.name)
+            if possible_function_invocation:
+                additive_factor = possible_function_invocation
+
         if not additive_factor:
             additive_factor = self.__parse_unary_operation()
 
@@ -232,18 +236,28 @@ class Parser:
         return UnaryOperation(ArithmeticOperator(possible_unary_operator), expression)
 
     def __parse_condition(self):
-        possible_left_id_or_literal = self.__parse_id_or_literal()
-        if not possible_left_id_or_literal:
+        possible_left_expression = self.__parse_arithmetic_expression()
+        if not possible_left_expression:
             return None
 
         possible_comparison_token = self.__check_if_one_of_tokens(ParserUtils.comparison_tokens)
         if possible_comparison_token:
-            possible_right_id_or_literal = self.__parse_id_or_literal()
-            if not possible_right_id_or_literal:
+            possible_right_expression = self.__parse_arithmetic_expression()
+            if not possible_right_expression:
                 ParserError(self.__get_position(),
-                            f'expected literal or id, instead got {self.__get_current_token()}').fatal()
-            return SingleCondition(possible_left_id_or_literal, possible_comparison_token, possible_right_id_or_literal)
-        return possible_left_id_or_literal
+                            f'expected literal, id or expression, instead got {self.__get_current_token()}').fatal()
+            return SingleCondition(possible_left_expression, possible_comparison_token, possible_right_expression)
+        return possible_left_expression
+
+    def __parse_function_invocation_in_expression(self, id_token):
+        if not self.__check_token(TokenType.OPEN_BRACKET):
+            return None
+
+        arguments = self.__parse_function_invocation_arguments()
+        self.__consume_token(TokenType.CLOSE_BRACKET)
+
+        id_token = Token(TokenType.IDENTIFIER, id_token)
+        return FunctionInvocation(id_token, arguments)
 
     def __parse_function_invocation(self, id_token):
         if not self.__check_token(TokenType.OPEN_BRACKET):

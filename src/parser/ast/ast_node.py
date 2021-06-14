@@ -1,5 +1,7 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class AstNode(ABC):
-    pass
+    @abstractmethod
+    def accept(self, visitor):
+        pass
